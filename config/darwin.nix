@@ -10,6 +10,7 @@
     ./darwin/launchd.nix
     ./darwin/system.nix
     # Applications
+    ./darwin/gpg.nix
     ./darwin/fish.nix
     ./darwin/tmux.nix
     ./darwin/vim.nix

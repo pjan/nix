@@ -25,7 +25,6 @@ in {
     ];
 
     variables = {
-      EDITOR        = "vim";
       GIT_PAGER     = "less";
       LC_CTYPE      = "en_US.UTF-8";
       LESS          = "-FRSXM";
