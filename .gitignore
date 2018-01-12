@@ -1,0 +1,10 @@
+*.log
+*.cache
+logs/
+private/
+result
+
+*.DS_Store
+.AppleDouble
+.LSOverride
+
