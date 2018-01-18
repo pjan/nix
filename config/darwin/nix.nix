@@ -1,8 +1,4 @@
-{ ... }:
-
-let
-  home = builtins.getEnv "HOME";
-in {
+{ ... }: {
 
   nixpkgs = {
     config = {
@@ -27,6 +23,7 @@ in {
     nixPath =
       [ "darwin-config=$HOME/src/nix/config/darwin.nix"
         "darwin=$HOME/src/nix/nix-darwin"
+        "home-manager=$HOME/src/nix/home-manager"
         "nixpkgs=$HOME/src/nix/nixpkgs"
         "nixpkgs-overlays=$HOME/src/nix/overlays"
       ];

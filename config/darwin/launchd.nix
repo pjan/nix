@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
 
 let
-  home = builtins.getEnv "HOME";
+  homedir = builtins.getEnv "HOME";
 in {
 
   launchd = {
     daemons = {
       cleanup = {
-        command = "${home}/bin/cleanup -u";
+        command = "${homedir}/bin/cleanup -u";
        serviceConfig.StartInterval = 86400;
       };
 

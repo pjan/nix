@@ -7,7 +7,7 @@ pkgs.buildEnv {
     diffstat
     diffutils
     ghi
-    #gist
+    gist
     gitRepo
     gitAndTools.git-imerge
     gitAndTools.gitFull
@@ -18,5 +18,6 @@ pkgs.buildEnv {
     #gitAndTools.git-annex-remote-rclone
     patch
     patchutils
+    travis
   ];
 }

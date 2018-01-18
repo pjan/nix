@@ -9,8 +9,8 @@ nix-install: sudo _nix-install
 darwin-install: sudo _darwin-install
 
 # Manage
-build: darwin-build
-switch: darwin-switch
+build: darwin-build home-build
+switch: darwin-switch home-switch
 
 darwin-build:
 		@darwin-rebuild build
@@ -22,7 +22,13 @@ darwin-update:
 		@nix-env -f '<darwin>' -u --leq -Q -j4 -k -A pkgs \
 		  || nix-env -f '<darwin>' -u --leq -Q -A pkgs
 
-update: sudo tag-before pull darwin-update switch tag-working
+home-build:
+		@home-manager build
+
+home-switch:
+		@home-manager switch
+
+update: sudo tag-before pull darwin-update switch tag-working mirror done
 
 ##########
 # Helpers
@@ -59,9 +65,13 @@ endif
 endif
 
 pull:
-		@echo "Updating repositories"
-		@(cd nixpkgs    && git pull --rebase)
-		@(cd nix-darwin && git pull --rebase)
+		@echo "# Updating repositories"
+		@echo "# Pulling nixpkgs"
+		@(cd nixpkgs      && git pull --rebase)
+		@echo "# Pulling nix-darwin"
+		@(cd nix-darwin   && git pull --rebase)
+		@echo "# Pulling home-manager"
+		@(cd home-manager && git pull --rebase)
 
 tag-before:
 		@echo "# Tagging before update"
@@ -71,3 +81,12 @@ tag-working:
 		@echo "# Tagging after update"
 		@git --git-dir=nixpkgs/.git branch -f last-known-good before-update
 		@git --git-dir=nixpkgs/.git branch -D before-update
+
+mirror:
+		@echo "# Pushing changes to mirrors on pjan"
+		@git --git-dir=nixpkgs/.git push --mirror pjan
+		@git --git-dir=nix-darwin/.git push --mirror pjan
+		@git --git-dir=home-manager/.git push --mirror pjan
+
+done:
+		@echo "### ALL DONE ###"

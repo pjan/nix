@@ -5,12 +5,11 @@
 
   require = [
     ./darwin/nix.nix
-    ./darwin/aliases.nix
     ./darwin/defaults.nix
     ./darwin/launchd.nix
     ./darwin/system.nix
     # Applications
-    ./darwin/gpg.nix
+    ./darwin/bash.nix
     ./darwin/fish.nix
     ./darwin/tmux.nix
     ./darwin/vim.nix

@@ -4,3 +4,6 @@
 [submodule "nix-darwin"]
 	path = nix-darwin
 	url = git://github.com/LnL7/nix-darwin.git
+[submodule "home-manager"]
+	path = home-manager
+	url = https://github.com/rycee/home-manager

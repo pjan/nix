@@ -90,24 +90,22 @@
               set guifont=menlo\ for\ powerline
           "
           " colorscheme {
-              set background=dark           " set a default dark background
-              if filereadable(expand("~/.vim/colors/solarized.vim"))
-                  let g:solarized_contrast="high"
-                  let g:solarized_visibility="high"
-                  color solarized           " load colorscheme
-              endif
+              set background=dark                 " set a default dark background
+              let g:solarized_contrast="high"
+              let g:solarized_visibility="high"
+              color solarized                     " load colorscheme
           " }
 
           " general ui settings {
-              set tabpagemax=15             " only show 15 tabs
-              set showmode                  " display the current mode
-              set title                     " show the filename in the window titlebar
-              set cursorline                " highlight current line
-              highlight clear signcolumn    " signcolumn should match background
-              highlight clear linenr        " current line number row will have same background color in relative mode
-              set visualbell t_vb=          " turn off error beep/flash
-              set novisualbell              " turn off visual bell
-              set ttyfast                   " smoother changes
+              set tabpagemax=15                   " only show 15 tabs
+              set showmode                        " display the current mode
+              set title                           " show the filename in the window titlebar
+              set cursorline                      " highlight current line
+              highlight clear signcolumn          " signcolumn should match background
+              highlight clear linenr              " current line number row will have same background color in relative mode
+              set visualbell t_vb=                " turn off error beep/flash
+              set novisualbell                    " turn off visual bell
+              set ttyfast                         " smoother changes
               set guicursor=n-v-c:block-cursor    " cursor shape (insert => vertical line)
 
               if has('cmdline_info')
@@ -125,7 +123,7 @@
                   set statusline+=%{fugitive#statusline()}    " git
                   set statusline+=\ [%{&ff}/%y]               " filetype
                   set statusline+=\ [%{getcwd()}]             " current dir
-                  " set statusline+=\ [a=\%03.3b/h=\%02.2b]     " ascii / hexadecimal value of char
+                  set statusline+=\ [a=\%03.3b/h=\%02.2b]     " ascii / hexadecimal value of char
                   set statusline+=%=%-14.(%l,%c%v%)\ %p%%     " right aligned file nav info
               endif
 
@@ -305,7 +303,6 @@
           " Initialize directories {
               function! InitializeDirectories()
                   let parent = $HOME
-                  let prefix = 'vim'
                   let dir_list = {
                               \ 'backup': 'backupdir',
                               \ 'views': 'viewdir',
@@ -315,7 +312,13 @@
                       let dir_list['undo'] = 'undodir'
                   endif
 
-                  let common_dir = parent . '/.' . prefix
+                  let common_dir = parent . '/.local/share/vim/'
+
+                  if exists("*mkdir")
+                    if !isdirectory(common_dir)
+                      call mkdir(common_dir)
+                    endif
+                  endif
 
                   for [dirname, settingname] in items(dir_list)
                       let directory = common_dir . dirname . '/'

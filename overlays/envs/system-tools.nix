@@ -6,6 +6,7 @@ pkgs.buildEnv {
     bashInteractive
     bash-completion
     nix-bash-completions
+    coreutils
     ctop
     cvc4
     direnv

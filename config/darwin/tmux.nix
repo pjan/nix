@@ -73,9 +73,6 @@
       # set up alias for turning on logging
       bind P pipe-pane 'exec cat >>~/tmux-#W.log' \; display-message "Toggled logging to ~/tmux-#W.log"
       bind p pipe-pane \; display-message 'Ended logging to $HOME/tmux-#W.log'
-
-      # Make fish the default shell
-      set -g default-command /run/current-system/sw/bin/fish
   '';
 
 }

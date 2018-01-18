@@ -1,16 +1,18 @@
 { config, pkgs, ... }:
 
 let
-  home = builtins.getEnv "HOME";
+  homedir = builtins.getEnv "HOME";
 in {
 
   environment = {
     systemPackages = with pkgs; [
       git-tools
       haskell-tools
+      js-tools
       lang-tools
       network-tools
       nix-tools
+      scala-tools
       security-tools
       system-tools
     ];
@@ -25,17 +27,13 @@ in {
     ];
 
     variables = {
-      GIT_PAGER     = "less";
-      LC_CTYPE      = "en_US.UTF-8";
-      LESS          = "-FRSXM";
-      LESSCHARSET   = "utf-8";
-      PAGER         = "less";
+      HOME_MANAGER_CONFIG = "${homedir}/src/nix/config/home.nix";
     };
   };
 
   networking = {
     #hostName = "AKIRA";
-    networkservices = [ "Ethernet" "Wi-Fi" ];
+    knownNetworkServices = [ "Ethernet" "Wi-Fi" ];
     dns = [ "8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844" ];
   };
 
