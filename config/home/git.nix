@@ -10,7 +10,7 @@ with config; {
 
     signing = {
       key = "8DD877977BD5E58B";
-      signByDefault = false;
+      signByDefault = true;
     };
 
     aliases = {
@@ -44,8 +44,11 @@ with config; {
       # Credit an author on the latest commit
       credit      = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f";
 
+      # Show the diff between the latest commit and the current state
+      d           = "!\"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat\"";
+
       # Show the diff between the nth latest commit (defaults to 1) and the current state
-      d          = "\"!d() { REV=\${1:-1}; git diff --patch-with-stat HEAD~$REV; }; git diff-index --quiet HEAD -- || clear; d\"";
+      di          = "\"!d() { REV=\${1:-1}; git diff --patch-with-stat HEAD~$REV; }; git diff-index --quiet HEAD -- || clear; d\"";
 
       # Find branches containing commit
       fb          = "!f() { git branch -a --contains $1; }; f";
@@ -125,7 +128,6 @@ with config; {
       };
 
       apply.whitespace     = "fix";
-      commit.gpgsign       = false;
       credential.helper    = "osxkeychain";
       ghi.token            = "!/usr/bin/security find-internet-password -a pjan -s github.com -l 'ghi token' -w";
       help.autocorrect     = true;
