@@ -31,6 +31,7 @@ in rec {
     ./home/git.nix
     ./home/gpg.nix
     ./home/wget.nix
+    ./home/ssh.nix
   ];
 
 }

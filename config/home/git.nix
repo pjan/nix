@@ -131,8 +131,8 @@ with config; {
       credential.helper    = "osxkeychain";
       ghi.token            = "!/usr/bin/security find-internet-password -a pjan -s github.com -l 'ghi token' -w";
       help.autocorrect     = true;
-      pull.rebase           = true;
-      rebase.autosquash     = true;
+      pull.rebase          = true;
+      rebase.autosquash    = true;
       rerere.enabled       = true;
 
       color = {
