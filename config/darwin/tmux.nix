@@ -1,4 +1,17 @@
-{ config, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+
+let
+  plugins = with pkgs;  [
+    tmuxPlugins.continuum
+    tmuxPlugins.fpp
+    tmuxPlugins.resurrect
+  ];
+in {
+
+  environment.systemPackages =
+    plugins ++ (with pkgs; [
+      tmuxinator
+    ]);
 
   programs.tmux.enable = true;
 
@@ -18,6 +31,10 @@
 
       # 256 color
       set -g default-terminal "xterm-256color"
+
+      # Ask for name when creating new window
+      unbind c
+      bind-key c command-prompt -p "Name of new window: " "new-window -n '%%'"
 
       # start first window and pane at 1, not zero
       set -g base-index 1
@@ -56,7 +73,7 @@
       set -g window-status-format '#[fg=colour245] #I : #W '
 
       # Right status bar
-      set -g status-right '#[bg=colour234] #[fg=colour239]%Y-%m-%d #[fg=colour239]| #[fg=colour239]%I:%M '
+      set -g status-right '#[bg=colour234,fg=colour239] Continuum: #{continuum_status} |  %Y-%m-%d | %I:%M '
 
       # Message
       set -g message-bg blue
@@ -70,9 +87,19 @@
       # Don't automatically rename windows
       set -g automatic-rename off
 
+      # continuum settings
+      set -g @continuum-save-interval '15'
+
+      # resurrect settings
+      set -g @resurrect-dir '~/.local/share/tmux/resurrect'
+      set -g @resurrect-capture-pane-contents 'on'
+
       # set up alias for turning on logging
       bind P pipe-pane 'exec cat >>~/tmux-#W.log' \; display-message "Toggled logging to ~/tmux-#W.log"
       bind p pipe-pane \; display-message 'Ended logging to $HOME/tmux-#W.log'
+
+      # Load plugins
+      ${lib.concatStrings (map (x: "run-shell ${x.rtp}\n") plugins)}
   '';
 
 }

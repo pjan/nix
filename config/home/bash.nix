@@ -66,6 +66,7 @@ in with config; {
       vi  = "vim";
       g   = "${pkgs.gitAndTools.hub}/bin/hub";
       git = "${pkgs.gitAndTools.hub}/bin/hub";
+      mux = "${pkgs.tmuxinator}/bin/tmuxinator";
 
       # lsstuff
       ls = "${pkgs.coreutils}/bin/ls --color";
