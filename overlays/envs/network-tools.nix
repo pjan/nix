@@ -23,6 +23,7 @@ pkgs.buildEnv {
     rsync
     sipcalc
     spiped
+    weechat
     w3m
     wget
   ];

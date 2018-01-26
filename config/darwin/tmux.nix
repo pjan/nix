@@ -30,7 +30,7 @@ in {
       bind C-a send-prefix
 
       # 256 color
-      set -g default-terminal "xterm-256color"
+      set -g default-terminal "tmux-256color"
 
       # Ask for name when creating new window
       unbind c
