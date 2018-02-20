@@ -30,8 +30,9 @@ in rec {
     ./home/curl.nix
     ./home/git.nix
     ./home/gpg.nix
-    ./home/wget.nix
     ./home/ssh.nix
+    ./home/weechat.nix
+    ./home/wget.nix
   ];
 
 }
