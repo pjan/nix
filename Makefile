@@ -90,3 +90,11 @@ mirror:
 
 done:
 		@echo "### ALL DONE ###"
+
+gc:
+		@find $(HOME) \
+		  \( -name dist -type d -o		\
+		     -name result -type l \) -print0	\
+		  | parallel -0 /bin/rm -fr {}
+		nix-collect-garbage --delete-older-than 14d
+
