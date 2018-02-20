@@ -12,6 +12,7 @@ in {
       lang-tools
       network-tools
       nix-tools
+      osx-apps
       scala-tools
       security-tools
       system-tools
@@ -24,6 +25,7 @@ in {
       "/info"
       "/share"
       "/fonts"
+      "/Applications"
     ];
 
     variables = {
