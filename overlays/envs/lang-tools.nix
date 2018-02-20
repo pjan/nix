@@ -22,6 +22,7 @@ pkgs.buildEnv {
     ott
     pkgconfig
     R
+    ctags
     rtags
     sbcl
     sloccount

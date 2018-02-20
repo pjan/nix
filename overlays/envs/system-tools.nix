@@ -3,6 +3,9 @@
 pkgs.buildEnv {
   name = "system-tools";
   paths = with pkgs; [
+    aspell
+    aspellDicts.en
+    aspellDicts.nl
     bashInteractive
     bash-completion
     nix-bash-completions

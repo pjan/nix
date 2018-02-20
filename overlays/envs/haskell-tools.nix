@@ -2,8 +2,10 @@
 
 pkgs.buildEnv {
   name = "haskell-tools";
-  paths = with pkgs; [
+  paths = with pkgs; with haskellPackages; [
     cabal2nix
     cabal-install
+    hpack
+    stack
   ];
 }

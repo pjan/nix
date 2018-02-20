@@ -11,6 +11,7 @@ pkgs.buildEnv {
     httrack
     iperf
     lftp
+    # mitmproxy
     mtr
     ngrep
     nmap
