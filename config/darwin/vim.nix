@@ -9,24 +9,41 @@
     plugins = [
       {
         names = [
+          "ale"
           "colors-solarized"
           "commentary"
-          "ctrlp"
           "fugitive"
+          "fzf-vim"
+          "fzfWrapper"
+          "ghc-mod-vim"
           "gist-vim"
+          "haskell-vim"
+          "hoogle"
+          "lushtags"
           "multiple-cursors"
+          "neco-ghc"
+          "neocomplete"
           "nerdcommenter"
           "nerdtree"
           "polyglot"
+          "purescript-vim"
           "repeat"
           "surround"
-          "syntastic"
+          "Tabular"
+          "Tagbar"
+          "UltiSnips"
           "undotree"
+          # "vim2hs" # haskell-vim is better
           "vim-airline"
           "vim-airline-themes"
           "vim-gitgutter"
+          # "vim-hdevtools"
           "vim-nerdtree-tabs"
+          "vim-nix"
+          # "vim-rooter"
+          "vim-scala"
           "vim-signify"
+          "vimproc"
           "webapi-vim"
         ];
       }
@@ -99,7 +116,7 @@
           " general ui settings {
               set tabpagemax=15                   " only show 15 tabs
               set showmode                        " display the current mode
-              set title                           " show the filename in the window titlebar
+              set title                           " show the filename in the window titlebar;;
               set cursorline                      " highlight current line
               highlight clear signcolumn          " signcolumn should match background
               highlight clear linenr              " current line number row will have same background color in relative mode
@@ -135,6 +152,7 @@
               set hlsearch                        " highligh searches
               set ignorecase                      " ignore case when searching
               set smartcase                       " ... but not when uppercase is used
+              set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
               set wildmenu                        " show list instead of just completing
               set wildmode=list:longest,full      " command <tab> completion, list matches, then longest common part, then all.
               set whichwrap=b,s,h,l,<,>,[,]       " move freely between files
@@ -158,17 +176,20 @@
           set pastetoggle=<F12>             " pastetoggle (sane indentation on pastes)
 
           if has("autocmd")
-              au FileType c,cpp,java,scala,go,php,javascript,puppet,python,rust,twig,xml,yml,perl au BufWritePre <buffer> call StripTrailingWhitespace()
-              au BufNewFile,BufRead  *.scala    set syntax=scala
+              au BufWritePre <buffer> call StripTrailingWhitespace()
               au FileType haskell setlocal commentstring=--\ %s
           endif
       " }
 
+      " ctags {
+          set tags+=tags;$HOME,build/tags;$HOME        " look for the tags file in directory of current file, its parent(s) up to $HOME, if not found, do the same for build/tags file
+      " }
+
       " key (re)mapping {
-          " derleader & localleader to space; make space nop
+          " map leader & localleader
           nnoremap <space> <nop>
-          let mapleader = ','
-          let maplocalleader = ',,'
+          let mapleader = ' '
+          let maplocalleader = '  '
 
           " easier moving in tabs and windows
           map <c-j> <c-w>j<c-w>_
@@ -181,25 +202,24 @@
           map <s-l> gt
 
           " move between buffers like tabs
-          map gb :bn<cr>
+          nmap <silent> ;l :bn<cr>
+          nmap <silent> ;h :bp<cr>
+          nmap <silent> ;d :b#<bar>bd#<CR>
 
           " yank from the cursor to the end of the line, to be consistent with c and d.
           nnoremap y y$
 
           " code folding options
-          nmap <leader>f0 :set foldlevel=0<cr>
-          nmap <leader>f1 :set foldlevel=1<cr>
-          nmap <leader>f2 :set foldlevel=2<cr>
-          nmap <leader>f3 :set foldlevel=3<cr>
-          nmap <leader>f4 :set foldlevel=4<cr>
-          nmap <leader>f5 :set foldlevel=5<cr>
-          nmap <leader>f6 :set foldlevel=6<cr>
-          nmap <leader>f7 :set foldlevel=7<cr>
-          nmap <leader>f8 :set foldlevel=8<cr>
-          nmap <leader>f9 :set foldlevel=9<cr>
-
-          " clearing highlighted search
-          nmap <silent> <leader>/ :nohlsearch<cr>
+          nmap <silent> <leader>f0 :set foldlevel=0<cr>
+          nmap <silent> <leader>f1 :set foldlevel=1<cr>
+          nmap <silent> <leader>f2 :set foldlevel=2<cr>
+          nmap <silent> <leader>f3 :set foldlevel=3<cr>
+          nmap <silent> <leader>f4 :set foldlevel=4<cr>
+          nmap <silent> <leader>f5 :set foldlevel=5<cr>
+          nmap <silent> <leader>f6 :set foldlevel=6<cr>
+          nmap <silent> <leader>f7 :set foldlevel=7<cr>
+          nmap <silent> <leader>f8 :set foldlevel=8<cr>
+          nmap <silent> <leader>f9 :set foldlevel=9<cr>
 
           " find merge conflict markers
           map <leader>fc /\v^[<\|=>]{7}( .*\|$)<cr>
@@ -231,75 +251,228 @@
 
       " plugins settings {
           " airline {
+              let g:airline#extensions#ale#enabled = 1
               let g:airline#extensions#tabline#enabled = 1
               let g:airline#extensions#tabline#show_splits = 1
               let g:airline_powerline_fonts = 1
           " }
 
-          " ctrlp {
-              let g:ctrlp_working_path_mode = 'ra'
-              let g:ctrlp_show_hidden = 1
-              let g:ctrlp_custom_ignore = {
-                  \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-                  \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
-              if executable('ag')
-                  let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-              elseif executable('ack-grep')
-                  let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
-              elseif executable('ack')
-                  let s:ctrlp_fallback = 'ack %s --nocolor -f'
-              else
-                  let s:ctrlp_fallback = 'find %s -type f'
-              endif
-              let g:ctrlp_user_command = {
-                  \ 'types': {
-                      \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-                      \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-                  \ },
-                  \ 'fallback': s:ctrlp_fallback
-              \ }
-          "}
+          " ale {
+              let g:ale_sign_column_always = 1
+              let g:ale_linters = {
+                  \ 'haskell': ['ghc-mod', 'stack-ghc-mod', 'hlint', 'stack-ghc', 'stack-build'],
+                  \ }
+              let g:ale_fixers = {
+                  \ 'haskell': ['brittany'],
+                  \ }
+          " }
 
           " Fugitive {
-                let g:signify_sign_show_count = 1
-                nnoremap <silent> <leader>gs :Gstatus<CR>
-                nnoremap <silent> <leader>gd :Gdiff<CR>
-                nnoremap <silent> <leader>gc :Gcommit<CR>
-                nnoremap <silent> <leader>gb :Gblame<CR>
-                nnoremap <silent> <leader>gl :Glog<CR>
-                nnoremap <silent> <leader>gp :Git push<CR>
-                nnoremap <silent> <leader>gr :Gread<CR>
-                nnoremap <silent> <leader>gw :Gwrite<CR>
-                nnoremap <silent> <leader>ge :Gedit<CR>
-                nnoremap <silent> <leader>gi :Git add -p %<CR>
-                nnoremap <silent> <leader>gg :SignifyToggle<CR>
+              let g:signify_sign_show_count = 1
+              nnoremap <silent> <leader>gs :GFiles?<CR>        " Use fzf's alternative to :GStatus
+              nnoremap <silent> <leader>gd :Gdiff<CR>
+              nnoremap <silent> <leader>gc :Gcommit<CR>
+              nnoremap <silent> <leader>gb :Gblame<CR>
+              nnoremap <silent> <leader>gl :Glog<CR>
+              nnoremap <silent> <leader>gp :Git push<CR>
+              nnoremap <silent> <leader>gr :Gread<CR>
+              nnoremap <silent> <leader>gw :Gwrite<CR>
+              nnoremap <silent> <leader>ge :Gedit<CR>
+              nnoremap <silent> <leader>gi :Git add -p %<CR>
+              nnoremap <silent> <leader>gg :SignifyToggle<CR>
+          " }
+
+          " fzf {
+              nnoremap <silent> <expr> <Leader>ff (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : "").":Files\<cr>"
+              nnoremap <silent>        <Leader>fb :Buffers<CR>       " open buffers
+              nnoremap <silent>        <Leader>fg :GFiles<CR>        " git files
+              nnoremap <silent>        <Leader>fp :Ag<CR>            " pattern (ag search)
+              nnoremap <silent>        <Leader>ft :Tags<CR>          " tags
+              nnoremap <silent>        <Leader>fm :Marks<CR>         " marks
+              nnoremap <silent>        <Leader>fh :History<CR>       " oldfiles and open buffers
+              nnoremap <silent>        <Leader>fc :Commits<CR>       " git commits
+              nnoremap <silent>        <Leader>fs :Snippets<CR>      " Snippets from UltiSnips
+          " }
+
+          " gitgutter {
+              let g:gitgutter_map_keys = 0
+              let g:gitgutter_realtime = 1
+              let g:gitgutter_eager = 1
+              let g:gitgutter_diff_args = '--ignore-space-at-eol'
+
+              nnoremap <silent> <Leader>hs :GitGutterStageHunk<CR>
+              nnoremap <silent> <Leader>hu :GitGutterUndoHunk<CR>
+              nnoremap <silent> <Leader>hx :GitGutterPreviewHunk<CR>
+              nnoremap <silent> <Leader>hp :GitGutterPrevHunk<CR>
+              nnoremap <silent> <Leader>hn :GitGutterNextHunk<CR>
+          "}
+
+          " haskell-vim {
+                """ Haskell syntax highlighting settings
+                let g:haskell_enable_quantification     = 1            " enable highlighting of forall
+                " let g:haskell_enable_recursivedo      = 1            " enable highlighting of mdo and rec
+                " let g:haskell_enable_arrowsyntax      = 1            " enable highlighting of proc
+                " let g:haskell_enable_pattern_synonyms = 1            " enable highlighting of pattern
+                " let g:haskell_enable_typeroles        = 1            " enable highlighting of type roles
+                " let g:haskell_enable_static_pointers  = 1            " enable highlighting of static
+
+                """ Haskell indentation settings
+                let g:haskell_indent_after_bare_where   = 2            " indentation after a bare where clause
+                let g:haskell_indent_case               = 2            " indentation of cases in case statement.
+                let g:haskell_indent_do                 = 3            " indentation of things in do statement.
+                let g:haskell_indent_if                 = 3            " indentation of 'then' and 'else' in if statements.
+                let g:haskell_indent_in                 = 0            " indentation of 'in' statement.
+                let g:haskell_indent_let                = 4            " indentation of additional lines in let statement.
+                let g:haskell_indent_where              = 6            " indentation of clauses in where statement.
+                let g:cabal_indent_section              = 2            " indentation of sections in cabal file
           " }
 
           " NerdTree {
-              map <C-e> <plug>NERDTreeTabsToggle<CR>
-              map <leader>e :NERDTreeFind<CR>
-              nmap <leader>nt :NERDTreeFind<CR>
+              map <silent> <C-e>     :NERDTreeTabsToggle<CR>
+              map <silent> <leader>e :NERDTreeFind<CR>
 
-              let NERDTreeShowBookmarks=0
-
-              let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-              let NERDTreeChDirMode=0
-              let NERDTreeQuitOnOpen=1
-
-              let NERDTreeMouseMode=2
-              let NERDTreeShowHidden=1
-              let NERDTreeKeepTreeInNewTab=1
-              let g:NERDShutUp=1
-              let g:nerdtree_tabs_open_on_gui_startup=0
+              let NERDTreeIgnore                      = ['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+              let NERDTreeShowBookmarks               = 0
+              let NERDTreeChDirMode                   = 0
+              let NERDTreeQuitOnOpen                  = 0
+              let NERDTreeMouseMode                   = 2
+              let NERDTreeShowHidden                  = 1
+              let NERDTreeKeepTreeInNewTab            = 1
+              let g:NERDShutUp                        = 1
+              let g:nerdtree_tabs_open_on_gui_startup = 0
           "}
+
+          " neco-ghc {
+              let g:haskellmode_completion_ghc = 1
+
+              autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+          " }
+
+          " neocomplete {
+              " Disable AutoComplPop.
+              let g:acp_enableAtStartup = 0
+              " Use neocomplete.
+              let g:neocomplete#enable_at_startup = 1
+              " Use smartcase.
+              let g:neocomplete#enable_smart_case = 1
+              " Set minimum syntax keyword length.
+              let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+              " <CR>: close popup and save indent.
+              inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+              function! s:my_cr_function()
+                return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+                " For no inserting <CR> key.
+                "return pumvisible() ? "\<C-y>" : "\<CR>"
+              endfunction
+              " <TAB>: completion.
+              inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+              " <C-h>, <BS>: close popup and delete backword char.
+              inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
+              inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
+          " }
+
+          " ultisnips {
+              let g:UltiSnipsExpandTrigger="<C-CR>"
+              let g:UltiSnipsJumpForwardTrigger="<C-tab>"
+              let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+          " }
 
           " UndoTree {
-              nnoremap <Leader>u :UndotreeToggle<CR>
-              let g:undotree_SetFocusWhenToggle=1
-          "}
-      "}
+              nnoremap <silent> <Leader>u :UndotreeToggle<CR>
 
-      " Functions {
+              let g:undotree_SetFocusWhenToggle = 1
+          " }
+
+          " Tabular {
+              let g:haskell_tabular = 1
+
+              vmap <silent> a= :Tabularize /=<CR>
+              vmap <silent> ad :Tabularize /::<CR>
+              vmap <silent> a- :Tabularize /-><CR>
+              vmap <silent> a: :Tabularize /:<CR>
+          " }
+
+          " Tagbar {
+              nnoremap <silent> <Leader>t :TagbarToggle<CR>
+
+              """ Tagbar configuration for haskell, if lushtags is on $PATH
+              if executable('lushtags')
+                  let g:tagbar_type_haskell = {
+                      \ 'ctagsbin' : 'lushtags',
+                      \ 'ctagsargs' : '--ignore-parse-error --',
+                      \ 'kinds' : [
+                          \ 'm:module:0',
+                          \ 'e:exports:1',
+                          \ 'i:imports:1',
+                          \ 't:declarations:0',
+                          \ 'd:declarations:1',
+                          \ 'n:declarations:1',
+                          \ 'f:functions:0',
+                          \ 'c:constructors:0'
+                      \ ],
+                      \ 'sro' : '.',
+                      \ 'kind2scope' : {
+                          \ 'd' : 'data',
+                          \ 'n' : 'newtype',
+                          \ 'c' : 'constructor',
+                          \ 't' : 'type'
+                      \ },
+                      \ 'scope2kind' : {
+                          \ 'data' : 'd',
+                          \ 'newtype' : 'n',
+                          \ 'constructor' : 'c',
+                          \ 'type' : 't'
+                      \ }
+                  \ }
+              endif
+
+              """ Tagbar configuration for scala
+              let g:tagbar_type_scala = {
+                  \ 'ctagstype' : 'Scala',
+                  \ 'kinds'     : [
+                      \ 'p:packages:1',
+                      \ 'V:values',
+                      \ 'v:variables',
+                      \ 'T:types',
+                      \ 't:traits',
+                      \ 'o:objects',
+                      \ 'a:aclasses',
+                      \ 'c:classes',
+                      \ 'r:cclasses',
+                      \ 'm:methods'
+                  \ ]
+              \ }
+          " }
+
+          " vim-rooter {
+             " let g:rooter_silent_chdir = 1
+             "
+             " augroup vimrc_rooter
+             "     autocmd VimEnter * :Rooter
+             " augroup end
+          " }
+      " }
+
+      " Highlighting {
+
+          """ autocompletion
+          highlight Pmenu           ctermbg=black ctermfg=245
+          highlight PmenuSel        ctermbg=234   ctermfg=254
+          highlight PmenuSBar       ctermbg=NONE  ctermfg=black
+          highlight PMenuThumb      ctermbg=NONE  ctermfg=234
+
+          """ Tagbar colors
+          highlight TagbarSignature ctermbg=NONE  ctermfg=64
+          highlight TagbarType                    ctermfg=136
+          highlight TagbarKind                    ctermfg=33
+          highlight TagbarHighlight ctermbg=NONE
+          highlight TagbarScope                   ctermfg=136
+
+      " }
+
+      " Functions and Commands {
+
           " Initialize directories {
               function! InitializeDirectories()
                   let parent = $HOME
@@ -350,10 +523,191 @@
                   let @/=_s
                   call cursor(l, c)
               endfunction
+
+              command! -nargs=0
+                    \ StripTrailingWhitespace call StripTrailingWhitespace()
+              cabbrev strip StripTrailingWhitespace
+          " }
+
+          " RelativeFunc {
+              " convert all args to function from relative ref to a file to absolute ones base on the cwd
+              function! RelativeFunc(function, ...)
+                  let file_basename = expand("%:p:h")
+                  let relativefiles = copy(a:000)
+
+                  let i = 0
+                  while i < len(relativefiles)
+                      "let relativefiles[i] = file_basename . "/" . relativefiles[i]
+                      let relativefiles[i] = substitute(file_basename . "/" . relativefiles[i], getcwd() . "/", "", "")
+                      let relativefiles[i] = simplify(relativefiles[i])
+                      let i = i + 1
+                  endwhile
+
+                  call call(a:function, relativefiles)
+              endfunction
+          " }
+
+          " RelativeFilesComplete {
+              " completion function for file names relative to the current file being edited
+              function! RelativeFilesComplete(ArgLead, CmdLine, CursorPos)
+                  let file_basename = expand("%:p:h")
+                  let path = file_basename . "/" . a:ArgLead
+
+                  if isdirectory(path) && path[len(path) - 1] != "/"
+                      let path = path . "/"
+                  endif
+
+                  let relativefiles = split(glob(path . "*"), "\n")
+
+                  let index = 0
+                  while index < len(relativefiles)
+                      if isdirectory(relativefiles[index])
+                          let relativefiles[index] .= "/"
+                      endif
+                      let relativefiles[index] = substitute(relativefiles[index], file_basename . "/" , "", "")
+                      let index += 1
+                  endwhile
+
+                  return relativefiles
+              endfunction
+          " }
+
+          " Move a file (relative to CWD) {
+              function! Move(name)
+                  let l:name    = a:name
+                  let l:oldfile = expand('%:p')
+
+                  " If the l:name is the name of a directory, than append the basename of
+                  " l:oldfile to it and use it.
+                  if isdirectory(l:name)
+                      let l:name = l:name . fnamemodify(l:oldfile, ':p:t')
+                  endif
+
+                  if bufexists(fnamemodify(l:name, ':p'))
+                      echohl ErrorMsg
+                      echomsg 'A buffer with that name already exists (use ! to override).'
+                      echohl None
+                      return 0
+                  endif
+
+                  let l:status = 1
+
+                  let v:errmsg = ""
+                  silent! exe 'saveas' . ' ' . l:name
+
+                  if v:errmsg =~# '^$\|^E329'
+                      let l:lastbufnr = bufnr('$')
+
+                      if expand('%:p') !=# l:oldfile && filewritable(expand('%:p'))
+                          if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
+                              silent exe l:lastbufnr . 'bwipe!'
+                          else
+                              echohl ErrorMsg
+                              echomsg 'Could not wipe out the old buffer for some reason.'
+                              echohl None
+                              let l:status = 0
+                          endif
+
+                          if delete(l:oldfile) != 0
+                              echohl ErrorMsg
+                              echomsg 'Could not delete the old file: ' . l:oldfile
+                              echohl None
+                              let l:status = 0
+                          endif
+                      else
+                          echohl ErrorMsg
+                          echomsg 'Rename failed for some reason.'
+                          echohl None
+                          let l:status = 0
+                      endif
+                  else
+                      echoerr v:errmsg
+                      let l:status = 0
+                  endif
+
+                  return l:status
+              endfunction
+
+              command! -nargs=1 -complete=customlist,RelativeFilesComplete
+                    \ Move call RelativeFunc(function('Move'), <f-args>)
+              cabbrev mv Move
+          " }
+
+          " Copy a file (relative to CWD) {
+              function! Copy(name)
+                  let l:name    = a:name
+                  let l:oldfile = expand('%:p')
+
+                      " If the l:name is the name of a directory, than append the basename of
+                      " l:oldfile to it and use it.
+                      if isdirectory(l:name)
+                          let l:name = l:name . fnamemodify(l:oldfile, ':p:t')
+                      endif
+
+                  let v:errmsg = ""
+
+                  let l:cpo_save = &cpoptions
+                  set cpoptions-=A
+
+                  silent! exe 'write ' . l:name
+
+                  let &cpoptions = l:cpo_save
+
+                  if v:errmsg != ""
+                      echohl ErrorMsg
+                      echomsg 'Copying file ' . l:oldfile . ' to ' . l:name . ' failed:'
+                      echoerr v:errmsg
+                      return 0
+                  endif
+
+                  silent! exe 'tabedit ' . l:name
+
+                  if v:errmsg != ""
+                      echohl ErrorMsg
+                      echomsg 'tabopen file ' . l:oldfile . ' failed:'
+                      echoerr v:errmsg
+                      return 0
+                  endif
+
+                  return 1
+              endfunction
+
+              command! -nargs=1 -complete=customlist,RelativeFilesComplete
+                    \ Copy call RelativeFunc(function('Copy'), <f-args>)
+              cabbrev cp Copy
+          " }
+
+          " Make a directory (relative to CWD) {
+              function! Mkdir(name)
+                  let l:name = a:name
+
+                      " If the l:name already exists, show an error message.
+                      if isdirectory(l:name) || filereadable(l:name)
+                      echohl ErrorMsg
+                      echomsg 'Tried to create directory "' . l:name . '", but it already exists.'
+                      return 0
+                      endif
+
+                  silent let l:output = system('mkdir -p ' . l:name)
+
+                  if v:shell_error != 0
+                      echohl ErrorMsg
+                      echomsg 'Tried to create directory "' . l:name . '", but failed with error code "' . v:shell_error . '" and output:'
+                      echoerr l:output
+                      return 0
+                  endif
+
+                  return 1
+              endfunction
+
+              command! -nargs=1 -complete=customlist,RelativeFilesComplete
+                    \ Mkdir call RelativeFunc(function('Mkdir'), <f-args>)
+              cabbrev mkdir Mkdir
           " }
       " }
 
       call InitializeDirectories()
+
     '';
 
   };
