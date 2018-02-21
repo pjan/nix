@@ -269,7 +269,7 @@
 
           " Fugitive {
               let g:signify_sign_show_count = 1
-              nnoremap <silent> <leader>gs :GFiles?<CR>        " Use fzf's alternative to :GStatus
+              nnoremap <silent> <leader>gs :GStatus<CR>
               nnoremap <silent> <leader>gd :Gdiff<CR>
               nnoremap <silent> <leader>gc :Gcommit<CR>
               nnoremap <silent> <leader>gb :Gblame<CR>
@@ -455,20 +455,28 @@
       " }
 
       " Highlighting {
+          " if you simply define highlight here, it interacts with colorschemes,
+          " so using an autocmd to solve this
+          function! UpdateHighlights()
+              """ autocompletion
+              highlight Pmenu           ctermbg=245    ctermfg=black
+              highlight PmenuSel        ctermbg=254    ctermfg=234
+              highlight PmenuSBar       ctermbg=black  ctermfg=black
+              highlight PmenuThumb      ctermbg=234    ctermfg=234
 
-          """ autocompletion
-          highlight Pmenu           ctermbg=black ctermfg=245
-          highlight PmenuSel        ctermbg=234   ctermfg=254
-          highlight PmenuSBar       ctermbg=NONE  ctermfg=black
-          highlight PMenuThumb      ctermbg=NONE  ctermfg=234
+              """ Tagbar colors
+              highlight TagbarSignature ctermbg=NONE  ctermfg=64
+              highlight TagbarType                    ctermfg=136
+              highlight TagbarKind                    ctermfg=33
+              highlight TagbarHighlight ctermbg=NONE
+              highlight TagbarScope                   ctermfg=136
+          endfunction
 
-          """ Tagbar colors
-          highlight TagbarSignature ctermbg=NONE  ctermfg=64
-          highlight TagbarType                    ctermfg=136
-          highlight TagbarKind                    ctermfg=33
-          highlight TagbarHighlight ctermbg=NONE
-          highlight TagbarScope                   ctermfg=136
-
+          augroup UpdateHighlights
+              autocmd!
+              autocmd VimEnter * call UpdateHighlights()
+              autocmd ColorScheme * call UpdateHighlights()
+          augroup end
       " }
 
       " Functions and Commands {
