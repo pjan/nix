@@ -9,26 +9,46 @@ nix-install: sudo _nix-install
 darwin-install: sudo _darwin-install
 
 # Manage
-build: darwin-build home-build
-switch: darwin-switch home-switch
-
 darwin-build:
 		@darwin-rebuild build
+		@rm result
 
 darwin-switch:
-		@darwin-rebuild switch
-
-darwin-update:
-		@nix-env -f '<darwin>' -u --leq -Q -j4 -k -A pkgs \
-		  || nix-env -f '<darwin>' -u --leq -Q -A pkgs
+		@darwin-rebuild switch -Q
+		@echo "# Darwin generation: $$(darwin-rebuild --list-generations | tail -1)"
 
 home-build:
 		@home-manager build
+		@rm result
 
 home-switch:
 		@home-manager switch
+		@echo "# Home generation:   $$(home-manager generations | head -1)"
 
-update: sudo tag-before pull darwin-update switch tag-working mirror done
+env-build:
+		@nix-build '<darwin>' -A pkgs.envs.ghc82
+		@rm result
+
+env-update:
+		@nix-env -f '<darwin>' -u --leq -Q -k -A pkgs.envs.ghc82
+		@rm result
+
+env-build-all:
+		@nix-build '<darwin>' -A pkgs.envs.ghc82
+		@nix-build '<darwin>' -A pkgs.envs.ghc82-profiled
+		@rm result
+
+env-update-all:
+		@nix-env -f '<darwin>' -u --leq -Q -j4 -k -A pkgs \
+		  || nix-env -f '<darwin>' -u --leq -Q -A pkgs
+
+build: darwin-build home-build env-build
+
+build-all: darwin-build home-build env-build-all
+
+switch: darwin-switch home-switch
+
+update: sudo tag-before pull env-build-all switch env-update-all tag-working mirror done
 
 ##########
 # Helpers
