@@ -40,7 +40,7 @@
           # "vim-hdevtools"
           "vim-nerdtree-tabs"
           "vim-nix"
-          # "vim-rooter"
+          "vim-rooter"
           "vim-scala"
           "vim-signify"
           "vimproc"
@@ -446,11 +446,11 @@
           " }
 
           " vim-rooter {
-             " let g:rooter_silent_chdir = 1
-             "
-             " augroup vimrc_rooter
-             "     autocmd VimEnter * :Rooter
-             " augroup end
+              let g:rooter_silent_chdir = 1
+
+              augroup vimrc_rooter
+                  autocmd VimEnter * :Rooter
+              augroup end
           " }
       " }
 
