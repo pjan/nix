@@ -260,7 +260,7 @@
           " ale {
               let g:ale_sign_column_always = 1
               let g:ale_linters = {
-                  \ 'haskell': ['ghc-mod', 'stack-ghc-mod', 'hlint', 'stack-ghc', 'stack-build'],
+                  \ 'haskell': ['ghc-mod', 'hlint'],
                   \ }
               let g:ale_fixers = {
                   \ 'haskell': ['brittany'],
@@ -343,7 +343,7 @@
           "}
 
           " neco-ghc {
-              let g:haskellmode_completion_ghc = 1
+              let g:haskellmode_completion_ghc = 0
 
               autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
           " }
