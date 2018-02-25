@@ -4,31 +4,26 @@ let
 
   mkAppDerivation =
     { name
-    , appName ? name
-    , version
-    , src
-    , description
-    , homepage
-    , postInstall ? ""
-    , sourceRoot ? "."
     , ...
-    }: with super; stdenv.mkDerivation {
-      name = "${name}-${version}";
-      version = version;
-      src = src;
+  } @ args:
+    let
+      drvName =
+        let
+          root = builtins.replaceStrings [ " " ] [ "-" ] name;
+          suffix =
+            if (super.lib.hasAttrByPath [ "meta" "version" ] args)
+            then ''-${super.lib.getAttrFromPath [ "meta" "version" ] args}''
+            else "";
+        in "${root}${suffix}";
+    in with super; stdenv.mkDerivation (args // {
+      name = drvName;
       buildInputs = [ undmg unzip ];
-      sourceRoot = sourceRoot;
-      phases = [ "unpackPhase" "installPhase" ];
+      phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
       installPhase = ''
-        mkdir -p "$out/Applications/${appName}.app"
-        cp -pR * "$out/Applications/${appName}.app"
-      '' + postInstall;
-      meta = with stdenv.lib; {
-        description = description;
-        homepage = homepage;
-        platforms = platforms.darwin;
-      };
-    };
+        mkdir -p "$out/Applications/${name}.app"
+        cp -pR * "$out/Applications/${name}.app"
+      '';
+    });
 
 in rec {
 
