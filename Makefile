@@ -10,12 +10,12 @@ darwin-install: sudo _darwin-install
 
 # Manage
 darwin-build:
-		@darwin-rebuild build
+		@nix build darwin.system
 		@rm result
 
 darwin-switch:
 		@darwin-rebuild switch -Q
-		@echo "# Darwin generation: $$(darwin-rebuild --list-generations | tail -1)"
+		@echo "# Nix-darwin generation: $$(darwin-rebuild --list-generations | tail -1)"
 
 home-build:
 		@home-manager build
@@ -23,10 +23,10 @@ home-build:
 
 home-switch:
 		@home-manager switch
-		@echo "# Home generation:   $$(home-manager generations | head -1)"
+		@echo "# Home-manager generation: $$(home-manager generations | head -1)"
 
 env-build:
-		@nix-build '<darwin>' -A pkgs.envs.ghc82
+		@nix build darwin.pkgs.envs.ghc82
 		@rm result
 
 env-update:
@@ -34,8 +34,8 @@ env-update:
 		@rm result
 
 env-build-all:
-		@nix-build '<darwin>' -A pkgs.envs.ghc82
-		@nix-build '<darwin>' -A pkgs.envs.ghc82-profiled
+		@nix build darwin.pkgs.envs.ghc82
+		@nix build darwin.pkgs.envs.ghc82-profiled
 		@rm result
 
 env-update-all:

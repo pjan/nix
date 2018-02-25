@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
 
   nixpkgs = {
     config = {
@@ -27,11 +27,12 @@
         "nixpkgs=$HOME/src/nix/nixpkgs"
         "nixpkgs-overlays=$HOME/src/nix/overlays"
       ];
-     extraOptions = ''
-        gc-keep-derivations = true
-        gc-keep-outputs = true
-        env-keep-derivations = true
-      '';
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      gc-keep-derivations = true
+      gc-keep-outputs = true
+      env-keep-derivations = true
+    '';
   };
 
   services.nix-daemon.enable = true;
