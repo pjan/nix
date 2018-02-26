@@ -5,7 +5,6 @@ pkgs.buildEnv {
   paths = with pkgs; with haskellPackages; [
     cabal2nix
     cabal-install
-    hpack
-    stack
+    haskell-init
   ];
 }
