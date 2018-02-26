@@ -44,6 +44,7 @@ pkgs.buildEnv {
     watch
     xz
     z3
+    youtube-dl
     zip
     zsh
   ];
