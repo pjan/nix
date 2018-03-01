@@ -99,6 +99,7 @@ with haskellPackages; [
   hakyll
   hashable
   hashtables
+  haskdogs
   hasktags
   hdevtools
   hedgehog
