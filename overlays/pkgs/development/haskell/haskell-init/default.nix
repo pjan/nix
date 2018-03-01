@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stack, stdenv, writeShellScriptBin }:
+{ fetchFromGitHub, git, stack, stdenv, writeShellScriptBin }:
 
 let
   stack-templates = stdenv.mkDerivation rec {
@@ -31,6 +31,6 @@ in writeShellScriptBin "hi" ''
   esac
 
   set -- ''${@:1:1} $TEMPLATE ''${@:3:$length}
-  ${stack}/bin/stack new $@ && cd $1 && rm stack.yaml
+  ${stack}/bin/stack new $@ && cd $1 && rm stack.yaml && ${git}/bin/git init
 ''
 
