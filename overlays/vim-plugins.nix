@@ -4,12 +4,12 @@ with super.vimPlugins; with super.vimUtils; with super; rec {
 
   vimPlugins = super.vimPlugins // {
 
-    neco-ghc-lushtags = buildVimPluginFrom2Nix {
-      name = "neco-ghc-lushtags-2017-03-17";
+    neco-ghc = buildVimPluginFrom2Nix {
+      name = "neco-ghc-2018-03-5";
       src = fetchgit {
-        url = "https://github.com/eagletmt/neco-ghc";
-        rev = "faa033c05e6a6470d3d780e3931b4c9c72042009";
-        sha256 = "01l5n4x94sb6bhjhjx2sibs8gm3zla7hb6szdfgbdmdf7jlzazak";
+        url = "https://github.com/pjan/neco-ghc";
+        rev = "42d386e80f9eb9d0931852b13039968575d534ee";
+        sha256 = "0igzvjmknhxpqsqmwlmxgiqw1yjsdw40fy47r649cn4zi09ppi7p";
       };
       dependencies = [];
     };
