@@ -2,12 +2,17 @@ self: super:
 
 with super.haskell.lib; let
 
+  myPackageDefs = super:
+    with super; rec {
+      lushtags = super.callPackage ~/src/lushtags { };
+    };
+
   mkPackages = haskellPackages: haskellPackageOverrides: haskellPackages.override {
-    overrides = haskellPackageOverrides;
+    overrides = self: super: haskellPackageOverrides (myPackageDefs super) self super;
   };
 
-  ghc82PackageOverrides = profiling: self: super:
-    {
+  ghc82PackageOverrides = profiling: myPackages: self: super:
+    myPackages // {
       blaze-builder-enumerator = doJailbreak super.blaze-builder-enumerator;
       codex                    = doJailbreak super.codex;
       compressed               = doJailbreak super.compressed;
@@ -48,6 +53,8 @@ with super.haskell.lib; let
   };
 
 in rec {
+
+  haskellPackages = ghc82Packages;
 
   haskell = super.haskell // {
 
