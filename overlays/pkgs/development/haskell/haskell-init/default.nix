@@ -7,8 +7,8 @@ let
     src = fetchFromGitHub {
       owner = "pjan";
       repo = "stack-templates";
-      rev = "0cd9c3a1cef31569e9b31df30cff180eb92cc955";
-      sha256 = "19aj6kjgljayd1b595ib8w7630q2sn47rd4gq2qvg6c83cx8p2ib";
+      rev = "87e2f6c687d7436fd8a465f80ff7e833390af396";
+      sha256 = "0sn2722w40gqqmi92l32qjsdjxfnh4ahfzxahvkl6vc94xd6bxrj";
     };
 
     installPhase = ''
