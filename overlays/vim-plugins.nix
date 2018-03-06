@@ -8,8 +8,8 @@ with super.vimPlugins; with super.vimUtils; with super; rec {
       name = "neco-ghc-2018-03-05";
       src = fetchgit {
         url = "https://github.com/pjan/neco-ghc";
-        rev = "42d386e80f9eb9d0931852b13039968575d534ee";
-        sha256 = "0igzvjmknhxpqsqmwlmxgiqw1yjsdw40fy47r649cn4zi09ppi7p";
+        rev = "78bcf10087e471cb1961967cd0bcc389be626092";
+        sha256 = "00qc3c0ss17firq2d4z1c42c0wx3xgpvdafpz6sdwy4raq8ackzy";
       };
       dependencies = [];
     };
