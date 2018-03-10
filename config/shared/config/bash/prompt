@@ -1,0 +1,108 @@
+# Check that terminfo exists before changing TERM var to xterm-256color
+# Prevents prompt flashing in Mac OS X 10.6 Terminal.app
+if [ -e /usr/share/terminfo/x/xterm-256color ]; then
+    export TERM='xterm-256color'
+fi
+
+tput sgr 0 0
+
+# Base styles and color palette
+# Solarized colors
+# https://github.com/altercation/solarized/tree/master/iterm2-colors-solarized
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+SOLAR_GREY=$(tput setaf 10)
+SOLAR_BLACK=$(tput setaf 0)
+SOLAR_YELLOW=$(tput setaf 136)
+SOLAR_ORANGE=$(tput setaf 166)
+SOLAR_RED=$(tput setaf 124)
+SOLAR_MAGENTA=$(tput setaf 125)
+SOLAR_VIOLET=$(tput setaf 61)
+SOLAR_BLUE=$(tput setaf 33)
+SOLAR_CYAN=$(tput setaf 37)
+SOLAR_GREEN=$(tput setaf 64)
+SOLAR_WHITE=$(tput setaf 15)
+
+# Styles
+style_at="\[${RESET}${SOLAR_VIOLET}\]"
+style_path="\[${RESET}${SOLAR_GREEN}\]"
+style_chars="\[${RESET}${SOLAR_WHITE}\]"
+style_branch="${RESET}${SOLAR_CYAN}"
+style_state="${RESET}${SOLAR_RED}"
+style_uncommitted="${RESET}${SOLAR_YELLOW}"
+style_unstaged="${RESET}${SOLAR_GREEN}"
+style_untracked="${RESET}${SOLAR_CYAN}"
+style_stashed="${RESET}${SOLAR_GREY}"
+
+# Highlight the user name when logged in as root
+if [[ "$USER" == "root" ]]; then
+    style_user="\[${BOLD}${SOLAR_RED}\]"
+else
+    style_user="\[${RESET}${SOLAR_ORANGE}\]"
+fi;
+
+# Highlight the hostname when connected via SSH
+if [[ "$SSH_TTY" ]]; then
+    style_host="\[${BOLD}${SOLAR_RED}\]"
+else
+    style_host="\[${RESET}${SOLAR_YELLOW}\]"
+fi;
+
+# Git status information
+prompt_git() {
+    local git_branch='';
+    local git_state='';
+
+    if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
+        if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+
+            # Ensure the index is up to date.
+            git update-index --really-refresh -q &>/dev/null;
+
+            # Check for uncommitted changes in the index
+            if ! $(git diff --quiet --ignore-submodules --cached); then
+                git_state+="${style_uncommitted}+";
+            fi;
+
+            # Check for unstaged changes
+            if ! $(git diff-files --quiet --ignore-submodules --); then
+                git_state+="${style_unstaged}!";
+            fi;
+
+            # Check for untracked files
+            if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+                git_state+="${style_untracked}?";
+            fi;
+
+            # Check for stashed files
+            if $(git rev-parse --verify refs/stash &>/dev/null); then
+                git_state+="${style_stashed}$";
+            fi;
+        fi;
+
+        git_branch="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+                    git rev-parse --short HEAD 2> /dev/null || \
+                    echo '(unknown)')";
+
+        [ -n "${git_state}" ] && git_state="${style_state}[${git_state}${style_state}]"
+
+        echo -e "${SOLAR_WHITE} on ${style_branch}${git_branch} ${git_state}"
+    else
+        return;
+    fi;
+}
+
+
+# Set the terminal title to the current working directory
+PS1="\[\033]0;\w\007\]"
+# Build the prompt
+#PS1+="\n" # Newline
+
+PS1+="${style_user}\u" # Username
+PS1+="${style_at}@" # @
+PS1+="${style_host}\h" # Host
+PS1+="${style_chars}:" # :
+PS1+="${style_path} \w" # Working directory
+PS1+="\$(prompt_git)" # Git details
+PS1+="\n" # Newline
+PS1+="${style_chars}\$ \[${RESET}\]" # $ (and reset color)
