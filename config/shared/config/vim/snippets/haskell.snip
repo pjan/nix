@@ -1,0 +1,251 @@
+snippet pragma
+abbr    Pragma
+  {-# ${0} #-}
+
+snippet langPragma
+abbr    Language Pragma
+  {-# LANGUAGE ${0:OverloadedStrings} #-}
+
+snippet optionsPragma
+abbr    Options Pragma
+  {-# OPTIONS_GHC ${0:-fno-warn-orphans} #-}
+
+snippet inlinePragma
+abbr    Inline Pragma
+  {-# INLINE ${0} #-}
+
+snippet unpackPragma
+abbr    Unpack Pragma
+  {-# UNPACK ${0} #-}
+
+snippet wall
+abbr    -Wall
+  {-# OPTIONS_GHC -Wall #-}
+
+snippet nowarn
+abbr    nowarn
+  {-# OPTIONS_GHC -fno-warn-name-shadowing  #-}
+  {-# OPTIONS_GHC -fno-warn-type-defaults   #-}
+  {-# OPTIONS_GHC -fno-warn-unused-do-bind #-}
+
+snippet module
+abbr    module
+  module `substitute(substitute(expand('%:r'), '[/\\]','.','g'),'^\%(\l*\.\)\?','','')`
+    ( ${1}
+    ) where
+
+snippet  import
+abbr     import ...
+  import ${1:Data.Text}
+
+snippet  importq
+abbr     import qualified ... as ...
+  import qualified ${1:Data.Text} as ${2:T}
+
+snippet line
+abbr    line
+  -------------------------------------------------------------------------------
+
+snippet undefined
+abbr    undefined
+  undefined
+
+snippet main
+abbr    main
+  main :: IO ()
+  main = ${0}
+
+snippet flex
+abbr    Flexible Extensions
+  {-# LANGUAGE FlexibleContexts #-}
+  {-# LANGUAGE FlexibleInstances #-}
+  {-# LANGUAGE TypeSynonymInstances #-}
+  ${0}
+
+snippet derive
+abbr    Deriving Extensions
+  {-# LANGUAGE DeriveFoldable #-}
+  {-# LANGUAGE DeriveFunctor #-}
+  {-# LANGUAGE DeriveGeneric #-}
+  {-# LANGUAGE DeriveTraversable #-}
+  {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+  ${0}
+
+snippet dd
+  deriving (Eq, Ord, Show, Generic)
+
+snippet languageApplicativeDo
+abbr    ApplicativeDo
+  {-# LANGUAGE ApplicativeDo #-}
+  ${0}
+
+snippet languageBangPatterns
+abbr    BangPatterns
+  {-# LANGUAGE BangPatterns #-}
+  ${0}
+
+snippet languageConstraintKinds
+abbr    ConstraintKinds
+  {-# LANGUAGE ConstraintKinds #-}
+  $[0}
+
+snippet languageDataKinds
+abbr    DataKinds
+  {-# LANGUAGE DataKinds #-}
+  ${0}
+
+snippet languageDeriveAnyClass
+abbr    DeriveAnyClass
+  {-# LANGUAGE DeriveAnyClass #-}
+  ${0}
+
+snippet languageDeriveFoldable
+abbr    DeriveFoldable
+  {-# LANGUAGE DeriveFunctor #-}
+  ${0}
+
+snippet languageDeriveFunctor
+abbr    DeriveFunctor
+  {-# LANGUAGE DeriveFunctor #-}
+  ${0}
+
+snippet languageDeriveGeneric
+abbr    DeriveGeneric
+  {-# LANGUAGE DeriveGeneric #-}
+  ${0}
+
+snippet languageDeriveTraversable
+abbr    DeriveTraversable
+  {-# LANGUAGE DeriveTraversable #-}
+  ${0}
+
+snippet languageEmptyCase
+abbr    EmptyCase
+  {-# LANGUAGE EmptyCase #-}
+  ${0}
+
+snippet languageExistentialQuantification
+abbr    ExistentialQuantification
+  {-# LANGUAGE ExistentialQuantification #-}
+  ${0}
+
+snippet languageFlexibleInstances
+abbr    FlexibleInstances
+  {-# LANGUAGE FlexibleInstances #-}
+  ${0}
+
+snippet languageFlexibleContexts
+abbr    FlexibleContexts
+  {-# LANGUAGE FlexibleContexts #-}
+  ${0}
+
+snippet languageGADTs
+abbr    GADTs
+  {-# LANGUAGE GADTs #-}
+  ${0}
+
+snippet languageGeneralizedNewtypeDeriving
+abbr    GeneralizedNewtypeDeriving
+  {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+  ${0}
+
+snippet languageInstanceSigs
+abbr    InstanceSigs
+  {-# LANGUAGE InstanceSigs #-}
+  ${0}
+
+snippet languageKindSignatures
+abbr    KindSignatures
+  {-# LANGUAGE KindSignatures #-}
+  ${0}
+
+snippet languageLambdaCase
+abbr    LambdaCase
+  {-# LANGUAGE LambdaCase #-}
+  ${0}
+
+snippet languageMultiParamTypeClasses
+abbr    MultiParamTypeClasses
+  {-# LANGUAGE MultiParamTypeClasses #-}
+  ${0}
+
+snippet languageNoImplicitPrelude
+abbr    NoImplicitPrelude
+  {-# LANGUAGE NoImplicitPrelude #-}
+  ${0}
+
+snippet languageNoMonomorphismRestriction
+abbr    NoMonomorphismRestriction
+  {-# LANGUAGE NoMonomorphismRestriction #-}
+  ${0}
+
+snippet languageOverlappingInstances
+abbr    OverlappingInstances
+  {-# LANGUAGE OverlappingInstances #-}
+  ${0}
+
+snippet languageOverloadedStrings
+abbr    OverloadedStrings
+  {-# LANGUAGE OverloadedStrings #-}
+  ${0}
+
+snippet languagePolyKinds
+abbr    PolyKinds
+  {-# LANGUAGE PolyKinds #-}
+  ${0}
+
+snippet languageRankNTypes
+abbr    RankNTypes
+  {-# LANGUAGE RankNTypes #-}
+  ${0}
+
+snippet languageRecordWildCards
+abbr    RecordWildCards
+  {-# LANGUAGE RecordWildCards #-}
+  ${0}
+
+snippet languageRecursiveDo
+abbr    RecursiveDo
+  {-# LANGUAGE RecursiveDo #-}
+  ${0}
+
+snippet languageScopedTypeVariables
+abbr    ScopedTypeVariables
+  {-# LANGUAGE ScopedTypeVariables #-}
+  ${0}
+
+snippet languageStandaloneDeriving
+abbr    StandaloneDeriving
+  {-# LANGUAGE StandaloneDeriving #-}
+  ${0}
+
+snippet languageTemplateHaskell
+abbr    TemplateHaskell
+  {-# LANGUAGE TemplateHaskell #-}
+  ${0}
+
+snippet languageTypeFamilies
+abbr    TypeFamilies
+  {-# LANGUAGE TypeFamilies #-}
+  ${0}
+
+snippet languageTypeOperators
+abbr    TypeOperators
+  {-# LANGUAGE TypeOperators #-}
+  ${0}
+
+snippet languageTypeSynonymInstances
+abbr    TypeSynonymInstances
+  {-# LANGUAGE TypeSynonymInstances #-}
+  ${0}
+
+snippet languageUndecidableInstances
+abbr    UndecidableInstances
+  {-# LANGUAGE UndecidableInstances #-}
+  ${0}
+
+snippet languageViewPatterns
+abbr    ViewPatterns
+  {-# LANGUAGE ViewPatterns #=}
+  ${0}
+
