@@ -4,15 +4,6 @@ with config; {
 
   home.sessionVariables."CURL_HOME" = "${xdg.configHome}/curl/curlrc";
 
-  xdg.configFile."curl/curlrc".text = ''
-    # Disguise curl as IE 9 on Windows 7
-    user-agent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)"
-
-    # When following a redirect, automatically set the previous URL as referer
-    referer = ";auto"
-
-    # wait 60 seconds before timing out
-    connect-timeout = 60
-  '';
+  xdg.configFile."curl/curlrc".source = ../shared/config/curl/curlrc;
 
 }
