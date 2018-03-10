@@ -6,7 +6,6 @@
   require = [
     ./darwin/nix.nix
     ./darwin/defaults.nix
-    ./darwin/launchd.nix
     ./darwin/system.nix
     # Applications
     ./darwin/bash.nix
