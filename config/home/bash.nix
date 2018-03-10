@@ -183,10 +183,10 @@ in with config; {
   '';
 
   xdg.configFile = {
-    "bash/completion".source = ./config/bash/completion;
-    "bash/dircolors".source = ./config/bash/dircolors;
-    "bash/inputrc".source = ./config/bash/inputrc;
-    "bash/prompt".source = ./config/bash/prompt;
+    "bash/completion".source = ../shared/config/bash/completion;
+    "bash/dircolors".source = ../shared/config/bash/dircolors;
+    "bash/inputrc".source = ../shared/config/bash/inputrc;
+    "bash/prompt".source = ../shared/config/bash/prompt;
   };
 
 }
