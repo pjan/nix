@@ -1,9 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with config;
-
-if pkgs.stdenv.isDarwin
-then {
+with config; {
 
   home = {
     sessionVariables = {
@@ -44,5 +41,3 @@ then {
   };
 
 }
-else {}
-

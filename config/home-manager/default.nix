@@ -23,13 +23,13 @@ in rec {
     EDITOR        = "${pkgs.vim}/bin/vim";
   };
 
-  require = [
+  imports = [
     ./modules/nixpkgs.nix
     # Applications
     ./modules/bash.nix
     ./modules/curl.nix
+    ./modules/gpg.nix
     ./modules/git.nix
-    # ./modules/gpg.nix
     ./modules/ssh.nix
     ./modules/weechat.nix
     ./modules/wget.nix
