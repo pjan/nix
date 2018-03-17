@@ -48,9 +48,9 @@
       }
     ];
 
-    vimConfig = builtins.readFile ../shared/config/vim/vimrc;
+    vimConfig = builtins.readFile ../../shared/config/vim/vimrc;
   };
 
-  environment.etc."vim/snippets/haskell.snip".source = ../shared/config/vim/snippets/haskell.snip;
+  environment.etc."vim/snippets/haskell.snip".source = ../../shared/config/vim/snippets/haskell.snip;
 
 }

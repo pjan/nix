@@ -28,9 +28,6 @@ in {
       "/Applications"
     ];
 
-    variables = {
-      HOME_MANAGER_CONFIG = "${homedir}/src/nix/config/home.nix";
-    };
   };
 
   networking = {

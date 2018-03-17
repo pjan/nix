@@ -1,4 +1,8 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+
+let
+  homedir = builtins.getEnv "HOME";
+in {
 
   nixpkgs = {
     config = {
@@ -8,7 +12,7 @@
 
     overlays =
       let
-        path = ../.. + "/overlays";
+        path = ../../.. + "/overlays";
       in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
@@ -21,7 +25,7 @@
     buildCores = 4;
     trustedUsers = [ "root" "pjan" ];
     nixPath =
-      [ "darwin-config=$HOME/src/nix/config/darwin.nix"
+      [ "darwin-config=$HOME/src/nix/config/nix-darwin"
         "darwin=$HOME/src/nix/nix-darwin"
         "home-manager=$HOME/src/nix/home-manager"
         "nixpkgs=$HOME/src/nix/nixpkgs"
@@ -36,5 +40,7 @@
   };
 
   services.nix-daemon.enable = true;
+
+  environment.variables.HOME_MANAGER_CONFIG = "${homedir}/src/nix/config/home-manager";
 
 }

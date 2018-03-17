@@ -24,15 +24,15 @@ in rec {
   };
 
   require = [
-    ./home/nix.nix
+    ./modules/nixpkgs.nix
     # Applications
-    ./home/bash.nix
-    ./home/curl.nix
-    ./home/git.nix
-    ./home/gpg.nix
-    ./home/ssh.nix
-    ./home/weechat.nix
-    ./home/wget.nix
+    ./modules/bash.nix
+    ./modules/curl.nix
+    ./modules/git.nix
+    # ./modules/gpg.nix
+    ./modules/ssh.nix
+    ./modules/weechat.nix
+    ./modules/wget.nix
   ];
 
 }

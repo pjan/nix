@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
-let
-  homedir = config.home.homeDirectory;
-in with config; {
+with config;
+
+if pkgs.stdenv.isDarwin
+then {
 
   home = {
     sessionVariables = {
-      GNUPGHOME          = "${xdg.configHome}/gnupg";
+      GNUPGHOME = "${xdg.configHome}/gnupg";
     };
   };
 
@@ -43,3 +44,5 @@ in with config; {
   };
 
 }
+else {}
+
