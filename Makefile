@@ -1,7 +1,7 @@
 UNAME := $(shell uname -s)
 SHELL := /bin/bash # $(shell which bash)
 ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-NIX_PATH := darwin=$(ROOT_DIR)nix-darwin:darwin-config=$(ROOT_DIR)config/nix-darwin:nix-overlays=$(ROOT_DIR)overlays:nixpkgs=$(ROOT_DIR)nixpkgs
+NIX_PATH := darwin=$(ROOT_DIR)nix-darwin:darwin-config=$(ROOT_DIR)config/nix-darwin:home-manager=$(ROOT_DIR)home-manager:home-manager-config=$(ROOT_DIR)config/home-manager:nix-overlays=$(ROOT_DIR)overlays:nixpkgs=$(ROOT_DIR)nixpkgs
 
 # Install
 nix-install: sudo _nix-install
@@ -68,7 +68,7 @@ else
 		@echo "# Nix Package Manager already installed"
 endif
 
-_darwin-install: export NIX_PATH=$(NIX_PATH)
+_darwin-install: export NIX_PATH=$(_NIX_PATH)
 _darwin-install:
 ifeq ($(UNAME),Darwin)
 ifeq ("$(wildcard /run/current-system/darwin-version)", "")
