@@ -7,7 +7,7 @@ pkgs.buildEnv {
     nodejs
     nodePackages.eslint
     nodePackages.csslint
-    jquery
+    # jquery
   ];
 }
 
