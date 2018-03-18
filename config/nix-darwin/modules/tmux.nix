@@ -15,11 +15,9 @@ in {
 
   programs.tmux.enable = true;
 
-  programs.tmux.enableSensible = true;
-
-  programs.tmux.enableFzf = true;
-
-  programs.tmux.enableVim = true;
+  # programs.tmux.enableSensible = true;
+  # programs.tmux.enableFzf = true;
+  # programs.tmux.enableVim = true;
 
   programs.tmux.tmuxConfig = ''
       # remap prefix to Control + a

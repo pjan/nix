@@ -1,17 +1,23 @@
-{ pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+
+let
+
+in {
 
   system.stateVersion = 2;
   services.activate-system.enable = true;
+  services.nix-daemon.enable = true;
 
   require = [
-    ./modules/nix.nix
-    ./modules/defaults.nix
-    ./modules/system.nix
-    # Applications
+    ../shared/modules/nixpkgs.nix
     ./modules/bash.nix
-    ./modules/fish.nix
+    ./modules/defaults.nix
+    ./modules/gpg.nix
+    ./modules/networking.nix
+    ./modules/packages.nix
     ./modules/tmux.nix
-    ./modules/vim.nix
+    ../shared/modules/neovim.nix
+    ../shared/modules/nix.nix
   ];
 
 }
