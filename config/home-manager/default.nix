@@ -24,8 +24,6 @@ in rec {
   };
 
   imports = [
-    ./modules/nixpkgs.nix
-    # Applications
     ./modules/bash.nix
     ./modules/curl.nix
     ./modules/gpg.nix
@@ -33,6 +31,7 @@ in rec {
     ./modules/ssh.nix
     ./modules/weechat.nix
     ./modules/wget.nix
+    ../shared/modules/nixpkgs.nix
   ];
 
 }

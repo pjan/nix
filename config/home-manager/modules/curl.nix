@@ -1,6 +1,12 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 
-with config; {
+with config; let
+
+in {
+
+  home.packages = with pkgs; [
+    curl
+  ];
 
   home.sessionVariables."CURL_HOME" = "${xdg.configHome}/curl/curlrc";
 

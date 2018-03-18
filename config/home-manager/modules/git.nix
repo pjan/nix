@@ -1,6 +1,8 @@
-{ config, pkgs, ... } :
+{ config, lib, pkgs, ... } :
 
-with config; {
+with config; let
+
+in {
 
   programs.git = {
     enable = true;

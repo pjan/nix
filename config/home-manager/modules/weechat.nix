@@ -1,6 +1,12 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with config; {
+with config; let
+
+in {
+
+  home.packages = with pkgs; [
+    weechat
+  ];
 
   home.sessionVariables."WEECHAT_HOME" = "${xdg.configHome}/weechat";
 
