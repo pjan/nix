@@ -21,7 +21,7 @@ let
           lushtags
           multiple-cursors
           neco-ghc
-          deoplete-nvim
+          # deoplete-nvim
           nerdcommenter
           nerdtree
           polyglot
@@ -46,7 +46,7 @@ let
         opt = [];
       };
 
-      customRC = builtins.readFile ../config/vim/vimrc;
+      customRC = builtins.readFile ../../resources/vim/vimrc;
     };
     withPython = true;
     withPython3 = true;
@@ -62,6 +62,6 @@ in {
 
   environment.variables.EDITOR = "${neovim}/bin/nvim";
 
-  environment.etc."vim/snippets/haskell.snip".source = ../config/vim/snippets/haskell.snip;
+  environment.etc."vim/snippets/haskell.snip".source = ../../resources/vim/snippets/haskell.snip;
 
 }

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  background = pkgs.copyPathToStore ../../shared/resources/bg2.jpg;
+  background = "#002b36"; # pkgs.copyPathToStore ../../shared/resources/bg2.jpg;
 in {
 
   services.xserver = {
@@ -99,6 +99,21 @@ in {
         Option "EmulateThirdButtonMoveTreshold" "30"
       '';
     };
+  };
+
+  services.autorandr.enable = true;
+
+  services.taffybar = {
+    enable = true;
+    extraPackages = self: [];
+  };
+
+  services.unclutter-xfixes.enable = true;
+
+  services.wallpaper = {
+    enable = true;
+    directory = "/data/images/wallpapers";
+    interval = 3600;
   };
 
 }

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  homedir = builtins.getEnv "HOME";
+
 in {
 
   nix = {
@@ -9,14 +9,14 @@ in {
     buildCores = 4;
     trustedUsers = [ "root" "pjan" ];
     nixPath =
-      [ "darwin-config=$HOME/src/nix/config/nix-darwin"
-        "darwin=$HOME/src/nix/nix-darwin"
-        "home-manager=$HOME/src/nix/home-manager"
-        "home-manager-config=$HOME/src/nix/config/home-manager"
+      [ "darwin-config=/data/src/nix/config/nix-darwin"
+        "darwin=/data/src/nix/nix-darwin"
+        "home-manager=/data/src/nix/home-manager"
+        "home-manager-config=/data/src/nix/config/home-manager"
         "nixos-config=/etc/nixos/configuration.nix"
-        # "nixos-config=$HOME/src/nix/config/nixos/io.pjan.aiko"
-        "nixpkgs=$HOME/src/nix/nixpkgs"
-        "nixpkgs-overlays=$HOME/src/nix/overlays"
+        # "nixos-config=/data/src/nix/config/nixos/io.pjan.aiko"
+        "nixpkgs=/data/src/nix/nixpkgs"
+        "nixpkgs-overlays=/data/src/nix/overlays"
       ];
     package = pkgs.nixUnstable;
     extraOptions = ''

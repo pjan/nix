@@ -229,6 +229,7 @@ with haskellPackages; [
   stylish-haskell
   system-fileio
   system-filepath
+  taffybar
   tagged
   tar
   tardis
@@ -265,6 +266,7 @@ with haskellPackages; [
   wai
   warp
   x509
+  xmonad
   yaml
   zippers
 ]

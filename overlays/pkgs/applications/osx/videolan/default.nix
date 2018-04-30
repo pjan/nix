@@ -1,7 +1,7 @@
 { pkgs }:
 
 with pkgs; osx.mkAppDerivation rec {
-  name = "VLC";
+  name = "videolan";
   src = fetchurl {
     url = "https://get.videolan.org/vlc/${meta.version}/macosx/vlc-${meta.version}.dmg";
     sha256 = "09x0sbzrs1sknw6bd549zgfq15ir7q6hflqyn4x71ib6qljy01j4";

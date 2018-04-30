@@ -1,13 +1,22 @@
-{ pkgs, lib, config, ... }:
+{ config, lib, pkgs, ... }:
 
 let
 
 in {
 
-  boot.loader = {
-    # Use the systemd EFI bootloader
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      # Use the systemd EFI bootloader
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelModules = [
+      "msr"
+      "coretemp"
+      "applesmc"
+    ];
+    cleanTmpDir = true;
+    # plymouth.enable = true;
   };
 
   hardware = {
@@ -31,6 +40,10 @@ in {
     };
   };
 
+  powerManagement.enable = true;
+
+  programs.light.enable = true;
+
   sound.mediaKeys.enable = true;
 
   services.actkbd = {
@@ -43,6 +56,13 @@ in {
     ];
   };
 
+  services.logind.extraConfig = ''
+    HandlePowerKey = suspend
+  '';
+
   services.mbpfan.enable = true;
 
+  services.upower.enable = true;
+
 }
+

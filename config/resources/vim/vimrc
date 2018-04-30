@@ -298,21 +298,21 @@
     " }
 
     " deoplete {
-        " Disable AutoComplPop.
-        let g:acp_enableAtStartup = 0
-        " Use deoplete
-        let g:deoplete#enable_at_startup = 1
-        " Use smartcase.
-        let g:deopletee#enable_smart_case = 1
+        " " Disable AutoComplPop.
+        " let g:acp_enableAtStartup = 0
+        " " Use deoplete
+        " let g:deoplete#enable_at_startup = 1
+        " " Use smartcase.
+        " let g:deopletee#enable_smart_case = 1
 
-        " <CR>: close popup and save indent.
-        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-        function! s:my_cr_function()
-          return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-        endfunction
-        " <C-h>, <BS>: close popup and delete backword char.
-        inoremap <expr> <C-h> deoplete#smart_close_popup()."\<C-h>"
-        inoremap <expr> <BS>  deoplete#smart_close_popup()."\<C-h>"
+        " " <CR>: close popup and save indent.
+        " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+        " function! s:my_cr_function()
+        "   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+        " endfunction
+        " " <C-h>, <BS>: close popup and delete backword char.
+        " inoremap <expr> <C-h> deoplete#smart_close_popup()."\<C-h>"
+        " inoremap <expr> <BS>  deoplete#smart_close_popup()."\<C-h>"
     " }
 
     " ultisnips {

@@ -1,12 +1,11 @@
 self: super: {}
-# self: super:
 
 # with super.haskell.lib; let
 
-#   myPackageDefs = super:
-#     with super; rec {
-#       lushtags = super.callPackage ~/src/lushtags { };
-#     };
+#   myPackageDefs = super: {};
+#     # with super; rec {
+#     #   lushtags = super.callPackage /data/src/lushtags { };
+#     # };
 
 #   mkPackages = haskellPackages: haskellPackageOverrides: haskellPackages.override {
 #     overrides = self: super: haskellPackageOverrides (myPackageDefs super) self super;

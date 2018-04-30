@@ -14,6 +14,7 @@ in {
       dejavu_fonts
       emojione
       fira-code
+      font-awesome_5
       freefont_ttf
       google-fonts
       inconsolata
@@ -22,5 +23,7 @@ in {
     ];
     fontconfig.ultimate.enable = true;
   };
+
+  i18n.consoleFont = "FiraCode-Retina";
 
 }

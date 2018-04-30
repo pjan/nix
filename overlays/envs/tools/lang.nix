@@ -26,6 +26,5 @@ pkgs.buildEnv {
     rtags
     sbcl
     sloccount
-    #verasco
   ];
 }

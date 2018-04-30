@@ -2,8 +2,9 @@
 
 pkgs.buildEnv {
   name = "osx-apps";
-  paths = with pkgs; [
+  paths = with pkgs.osx; [
     dash
+    pinentry_mac
     vlc
   ];
 }

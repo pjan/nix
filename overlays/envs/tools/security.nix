@@ -7,6 +7,5 @@ pkgs.buildEnv {
     keybase
     kbfs
     paperkey
-    pinentry_mac
   ];
 }
