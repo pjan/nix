@@ -18,7 +18,6 @@ in {
 
     desktopManager = {
       default = "none";
-      # wallpaper = "fill";
       xterm.enable = false;
     };
 

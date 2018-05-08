@@ -10,6 +10,7 @@ in {
     ../../modules/compton.nix
     ../../modules/dunst.nix
     ../../modules/fonts.nix
+    ../../modules/git.nix
     ../../modules/gpg.nix
     ../../modules/kitty.nix
     ../../modules/networking.nix

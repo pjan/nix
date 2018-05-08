@@ -1,6 +1,8 @@
 [
+  ./programs/git.nix
   ./programs/kitty.nix
   ./programs/neovim.nix
+  ./programs/shells/bash.nix
   ./services/misc/dunst.nix
   ./services/misc/taffybar.nix
   ./services/misc/wallpaper.nix
