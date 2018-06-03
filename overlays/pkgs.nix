@@ -9,6 +9,9 @@ rec {
   haskell-init = super.callPackage ./pkgs/development/haskell/haskell-init { };
   tmuxPlugins  = super.recurseIntoAttrs (super.callPackage ./pkgs/misc/tmux-plugins { });
 
+  workspace    = super.callPackage ./pkgs/tools/workspace { };
+  browser      = super.callPackage ./pkgs/tools/browser   { };
+
   # OSX Apps
   osx = {
     dash       = super.callPackage ./pkgs/applications/osx/dash { };

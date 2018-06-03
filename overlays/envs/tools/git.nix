@@ -9,13 +9,13 @@ pkgs.buildEnv {
     ghi
     gist
     gitRepo
-    gitAndTools.git-imerge
-    gitAndTools.gitFull
-    gitAndTools.gitflow
-    gitAndTools.hub
+    # gitAndTools.git-imerge
+    # gitAndTools.gitFull
+    # gitAndTools.gitflow
+    # gitAndTools.hub
     gitAndTools.tig
-    #gitAndTools.git-annex
-    #gitAndTools.git-annex-remote-rclone
+    # gitAndTools.git-annex
+    # gitAndTools.git-annex-remote-rclone
     patch
     patchutils
     travis

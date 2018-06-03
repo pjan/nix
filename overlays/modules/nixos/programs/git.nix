@@ -6,18 +6,37 @@ let
 
   cfg = config.programs.git;
 
-  package = with pkgs;
-    if (cfg.config != null)
-    then symlinkJoin {
-      name = "git";
-      buildInputs = [ makeWrapper ];
-      paths = [ git ];
-      postBuild = ''
-        wrapProgram "$out/bin/git" \
-        --set GIT_CONFIG "/etc/git/git.conf
-      '';
-    }
-    else git;
+  signModule = types.submodule {
+    options = {
+      key = mkOption {
+        type = types.str;
+        description = "The default GPG signing key fingerprint.";
+      };
+
+      signByDefault = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether commits should be signed by default.";
+      };
+
+      gpgPath = mkOption {
+        type = types.str;
+        default = "${pkgs.gnupg}/bin/gpg2";
+        defaultText = "\${pkgs.gnupg}/bin/gpg2";
+        description = "Path to GnuPG binary to use.";
+      };
+    };
+  };
+
+  package = with pkgs; symlinkJoin {
+    name = "git";
+    buildInputs = [ makeWrapper ];
+    paths = [ cfg.package ];
+    postBuild = ''
+      wrapProgram "$out/bin/git" \
+      --set GIT_CONFIG "/etc/gitconfig"
+    '';
+  };
 
 in {
 
@@ -33,12 +52,44 @@ in {
         '';
       };
 
-      config = mkOption {
-        type = types.nullOr types.lines;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.git;
+        defaultText = "pkgs.git";
+        description = "Git package to install.";
+      };
+
+      userName = mkOption {
+        type = types.str;
+        description = "Default user name to use.";
+      };
+
+      userEmail = mkOption {
+        type = types.str;
+        description = "Default user email to use.";
+      };
+
+      aliases = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Git aliases to define.";
+      };
+
+      signing = mkOption {
+        type = types.nullOr signModule;
         default = null;
-        description = ''
-          Git configuration.
-        '';
+        description = "Options related to signing commits using GnuPG.";
+      };
+
+      extraConfig = mkOption {
+        type = types.either types.attrs types.lines;
+        default = {};
+        description = "Additional configuration to add.";
+      };
+
+      iniContent = mkOption {
+        type = types.attrsOf types.attrs;
+        internal = true;
       };
 
     };
@@ -46,16 +97,38 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
-    (mkIf (cfg.config != null) {
-
-    })
-
     {
       environment.systemPackages = [ package ];
-    }
+
+      programs.git.iniContent.user = {
+        name = cfg.userName;
+        email = cfg.userEmail;
+      };
+
+      environment.etc."gitconfig".text =
+        generators.toINI {} cfg.iniContent;
+      }
+
+      (mkIf (cfg.signing != null) {
+        programs.git.iniContent = {
+          user.signingKey = cfg.signing.key;
+          commit.gpgSign = cfg.signing.signByDefault;
+          gpg.program = cfg.signing.gpgPath;
+        };
+      })
+
+      (mkIf (cfg.aliases != {}) {
+        programs.git.iniContent.alias = cfg.aliases;
+      })
+
+      (mkIf (lib.isAttrs cfg.extraConfig) {
+        programs.git.iniContent = cfg.extraConfig;
+      })
+
+      (mkIf (lib.isString cfg.extraConfig) {
+        environment.etc."gitconfig".text = cfg.extraConfig;
+      })
   ]);
-
-
 
 }
 

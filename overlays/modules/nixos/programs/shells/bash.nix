@@ -164,6 +164,14 @@ in {
           Dircolors configuration.
         '';
       };
+
+      shellInitExtra = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Additional interactive shell init content.
+        '';
+      };
     };
 
   };
@@ -184,6 +192,8 @@ in {
         ${shopts}
 
         ${dirclr}
+
+        ${cfg.shellInitExtra}
       '';
 
       programs.bash.enableCompletion = cfg.enableCompletion;
