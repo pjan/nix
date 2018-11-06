@@ -22,6 +22,9 @@ let
           multiple-cursors
           neco-ghc
           deoplete-nvim
+          LanguageClient-neovim
+          neosnippet
+          neosnippet-snippets
           nerdcommenter
           nerdtree
           polyglot
@@ -30,7 +33,7 @@ let
           surround
           Tabular
           Tagbar
-          UltiSnips
+          # UltiSnips
           undotree
           vim-airline
           vim-airline-themes
@@ -46,7 +49,7 @@ let
         opt = [];
       };
 
-      customRC = builtins.readFile ../config/vim/vimrc;
+      customRC = builtins.readFile ../../resources/vim/vimrc;
     };
     withPython = true;
     withPython3 = true;
@@ -62,6 +65,6 @@ in {
 
   environment.variables.EDITOR = "${neovim}/bin/nvim";
 
-  environment.etc."vim/snippets/haskell.snip".source = ../config/vim/snippets/haskell.snip;
+  environment.etc."vim/snippets/haskell.snippets".source = ../../resources/vim/snippets/haskell.snippets;
 
 }

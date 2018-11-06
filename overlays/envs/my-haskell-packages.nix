@@ -1,4 +1,4 @@
-pkgs:  haskellPackages:
+pkgs: version:  haskellPackages:
 
 with haskellPackages; [
   Boolean
@@ -32,7 +32,7 @@ with haskellPackages; [
   bytes
   bytestring
   bytestring-show
-  cabal-helper
+  # cabal-helper
   case-insensitive
   cassava
   categories
@@ -63,7 +63,7 @@ with haskellPackages; [
   curl
   deepseq
   diagrams
-  diagrams-builder
+  # diagrams-builder
   diagrams-core
   diagrams-lib
   diagrams-svg
@@ -94,13 +94,13 @@ with haskellPackages; [
   # ghc-mod
   ghc-paths
   gitlib
-  gitlib-test
+  # gitlib-test
   groups
   hakyll
   hashable
   hashtables
-  haskdogs
-  hasktags
+  # haskdogs
+  # hasktags
   hdevtools
   hedgehog
   hedgehog-checkers
@@ -175,7 +175,7 @@ with haskellPackages; [
   pipes-bytestring
   pipes-concurrency
   pipes-extras
-  pipes-files
+  # pipes-files
   pipes-group
   pipes-http
   pipes-network
@@ -267,5 +267,9 @@ with haskellPackages; [
   x509
   yaml
   zippers
-]
+] ++
+
+(pkgs.stdenv.lib.optionals (version < 8.3)
+[
+])
 

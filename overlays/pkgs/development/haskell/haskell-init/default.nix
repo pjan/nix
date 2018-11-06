@@ -18,7 +18,7 @@ let
 
   };
 
-in writeShellScriptBin "hi" ''
+in writeShellScriptBin "haskell-init" ''
   length=$(($#-1))
 
   case "$2" in
