@@ -6,7 +6,7 @@ let
 
   cfg = config.programs.kitty;
 
-  package = 
+  package =
     if (cfg.config != null)
     then pkgs.writeShellScriptBin "kitty" ''
       ${pkgs.kitty}/bin/kitty --config /etc/kitty/kitty.conf "$@"

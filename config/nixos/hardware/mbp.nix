@@ -16,7 +16,6 @@ in {
       "applesmc"
     ];
     cleanTmpDir = true;
-    # plymouth.enable = true;
   };
 
   hardware = {
@@ -44,7 +43,11 @@ in {
 
   programs.light.enable = true;
 
-  sound.mediaKeys.enable = true;
+  sound = {
+    enable = true;
+
+    mediaKeys.enable = true;
+  };
 
   services.actkbd = {
     enable = true;
@@ -56,11 +59,20 @@ in {
     ];
   };
 
+  services.avahi.enable = true;
+
   services.logind.extraConfig = ''
     HandlePowerKey = suspend
   '';
 
   services.mbpfan.enable = true;
+
+  services.printing = {
+    enable = true;
+    drivers = [
+      pkgs.gutenprint
+    ];
+  };
 
   services.upower.enable = true;
 

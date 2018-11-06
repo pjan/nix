@@ -21,7 +21,10 @@ let
           lushtags
           multiple-cursors
           neco-ghc
-          # deoplete-nvim
+          deoplete-nvim
+          LanguageClient-neovim
+          neosnippet
+          neosnippet-snippets
           nerdcommenter
           nerdtree
           polyglot
@@ -30,7 +33,7 @@ let
           surround
           Tabular
           Tagbar
-          UltiSnips
+          # UltiSnips
           undotree
           vim-airline
           vim-airline-themes
@@ -62,6 +65,6 @@ in {
 
   environment.variables.EDITOR = "${neovim}/bin/nvim";
 
-  environment.etc."vim/snippets/haskell.snip".source = ../../resources/vim/snippets/haskell.snip;
+  environment.etc."vim/snippets/haskell.snippets".source = ../../resources/vim/snippets/haskell.snippets;
 
 }

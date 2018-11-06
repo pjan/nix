@@ -6,9 +6,7 @@ let
 
   cfg = config.services.taffybar;
 
-  taffybar = package.override {
-    packages = self: cfg.extraPackages self;
-  };
+  taffybar = cfg.package;
 
 in {
 
@@ -58,11 +56,13 @@ in {
       partOf = [ "graphical-session.target" ];
       after = [ "graphical-session-pre.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/taffybar";
+        ExecStart = "${taffybar}/bin/taffybar";
+        RestartSec = 3;
+        Restart = "always";
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ taffybar ];
   };
 
 }

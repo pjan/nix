@@ -14,7 +14,7 @@ in {
 
     layout = "us";
 
-    xkbOptions = "caps:ctrl_modifier, terminate:ctrl_alt_bksp"; #, altwin:ctrl_win";
+    xkbOptions = "caps:ctrl_modifier, terminate:ctrl_alt_bksp, lv3:ralt_switch_multikey, grp:shifts_toggle"; #, altwin:ctrl_win";
 
     desktopManager = {
       default = "none";
@@ -29,7 +29,7 @@ in {
       sessionCommands = ''
         ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
         ${pkgs.xlibs.xrdb}/bin/xrdb -merge ~/.Xresources
-        ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape'
+        ${pkgs.xcape}/bin/xcape -e 'Caps_Lock=Escape;Hyper_L=Tab;Hyper_R=backslash'
       '';
     };
 
@@ -105,6 +105,7 @@ in {
   services.taffybar = {
     enable = true;
     extraPackages = self: [];
+    package = pkgs.unstable.taffybar; #((import /home/pjan/.config/taffybar){}).taffybar;
   };
 
   services.unclutter-xfixes.enable = true;

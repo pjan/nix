@@ -1,9 +1,12 @@
 [
+  ./programs/curl.nix
   ./programs/git.nix
+  ./programs/home-manager.nix
   ./programs/kitty.nix
   ./programs/neovim.nix
   ./programs/shells/bash.nix
   ./services/misc/dunst.nix
   ./services/misc/taffybar.nix
+  ./services/misc/udiskie.nix
   ./services/misc/wallpaper.nix
 ]

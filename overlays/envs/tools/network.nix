@@ -6,16 +6,14 @@ pkgs.buildEnv {
     adns
     aria2
     cacert
-    curl
     dnsutils
     httrack
     iperf
     lftp
-    # mitmproxy
+    mitmproxy
     mtr
     ngrep
     nmap
-    openssh
     openssl
     openvpn
     pdnsd

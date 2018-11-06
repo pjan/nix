@@ -19,7 +19,7 @@
     set virtualedit=onemore           " cursor can go one beyond last char
     set history=1000                  " store a lot of history
 
-    set clipboard=unnamed             " share clipboard with the OS
+    set clipboard=unnamedplus         " share clipboard with the OS
 
     " Backup and undo
     set backup                        " backups are nice ...
@@ -298,31 +298,39 @@
     " }
 
     " deoplete {
-        " " Disable AutoComplPop.
-        " let g:acp_enableAtStartup = 0
-        " " Use deoplete
-        " let g:deoplete#enable_at_startup = 1
-        " " Use smartcase.
-        " let g:deopletee#enable_smart_case = 1
+        " Disable AutoComplPop.
+        let g:acp_enableAtStartup = 0
+        " Use deoplete
+        let g:deoplete#enable_at_startup = 1
+        " Use smartcase.
+        let g:deoplete#enable_smart_case = 1
 
-        " " <CR>: close popup and save indent.
-        " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-        " function! s:my_cr_function()
-        "   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-        " endfunction
-        " " <C-h>, <BS>: close popup and delete backword char.
-        " inoremap <expr> <C-h> deoplete#smart_close_popup()."\<C-h>"
-        " inoremap <expr> <BS>  deoplete#smart_close_popup()."\<C-h>"
+        " <CR>: close popup and save indent.
+        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+        function! s:my_cr_function()
+          return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+        endfunction
+        " <C-h>, <BS>: close popup and delete backward char.
+        inoremap <expr> <C-h> deoplete#smart_close_popup()."\<C-h>"
+        inoremap <expr> <BS>  deoplete#smart_close_popup()."\<C-h>"
     " }
 
-    " ultisnips {
-        let g:UltiSnipsSnippetsDir = '/run/current-system/etc/vim/snippets'
-        let g:UltiSnipsEnableSnipMate = 1
-        let g:UltiSnipsExpandTrigger="<S-TAB>"
+    " LanguageClient {
+        if executable('hie')
+            let g:LanguageClient_serverCommands = {
+            \ 'haskell': ['hie', '--lsp'],
+            \ }
+        endif
     " }
 
-    " ultisnips / deoplete {
+    " neosnippet {
+        let g:neosnippet#snippets_directory = '/run/current-system/etc/vim/snippets'
+        let g:neosnippet#enable_snipmate_compatibility = 1
+    " }
+
+    " neosnippet / deoplete {
         imap <silent> <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+        imap <silent> <expr><S-TAB> neosnippet#expandable_or_jumpable() ? "<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
         if has('conceal')
           set conceallevel=2 concealcursor=i
         endif
@@ -486,24 +494,6 @@
         cabbrev strip StripTrailingWhitespace
     " }
 
-    " RelativeFunc {
-        " convert all args to function from relative ref to a file to absolute ones base on the cwd
-        function! RelativeFunc(function, ...)
-            let file_basename = expand("%:p:h")
-            let relativefiles = copy(a:000)
-
-            let i = 0
-            while i < len(relativefiles)
-                "let relativefiles[i] = file_basename . "/" . relativefiles[i]
-                let relativefiles[i] = substitute(file_basename . "/" . relativefiles[i], getcwd() . "/", "", "")
-                let relativefiles[i] = simplify(relativefiles[i])
-                let i = i + 1
-            endwhile
-
-            call call(a:function, relativefiles)
-        endfunction
-    " }
-
     " RelativeFilesComplete {
         " completion function for file names relative to the current file being edited
         function! RelativeFilesComplete(ArgLead, CmdLine, CursorPos)
@@ -527,139 +517,6 @@
 
             return relativefiles
         endfunction
-    " }
-
-    " Move a file (relative to CWD) {
-        function! Move(name)
-            let l:name    = a:name
-            let l:oldfile = expand('%:p')
-
-            " If the l:name is the name of a directory, than append the basename of
-            " l:oldfile to it and use it.
-            if isdirectory(l:name)
-                let l:name = l:name . fnamemodify(l:oldfile, ':p:t')
-            endif
-
-            if bufexists(fnamemodify(l:name, ':p'))
-                echohl ErrorMsg
-                echomsg 'A buffer with that name already exists (use ! to override).'
-                echohl None
-                return 0
-            endif
-
-            let l:status = 1
-
-            let v:errmsg = ""
-            silent! exe 'saveas' . ' ' . l:name
-
-            if v:errmsg =~# '^$\|^E329'
-                let l:lastbufnr = bufnr('$')
-
-                if expand('%:p') !=# l:oldfile && filewritable(expand('%:p'))
-                    if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
-                        silent exe l:lastbufnr . 'bwipe!'
-                    else
-                        echohl ErrorMsg
-                        echomsg 'Could not wipe out the old buffer for some reason.'
-                        echohl None
-                        let l:status = 0
-                    endif
-
-                    if delete(l:oldfile) != 0
-                        echohl ErrorMsg
-                        echomsg 'Could not delete the old file: ' . l:oldfile
-                        echohl None
-                        let l:status = 0
-                    endif
-                else
-                    echohl ErrorMsg
-                    echomsg 'Rename failed for some reason.'
-                    echohl None
-                    let l:status = 0
-                endif
-            else
-                echoerr v:errmsg
-                let l:status = 0
-            endif
-
-            return l:status
-        endfunction
-
-        command! -nargs=1 -complete=customlist,RelativeFilesComplete
-              \ Move call RelativeFunc(function('Move'), <f-args>)
-        cabbrev mv Move
-    " }
-
-    " Copy a file (relative to CWD) {
-        function! Copy(name)
-            let l:name    = a:name
-            let l:oldfile = expand('%:p')
-
-                " If the l:name is the name of a directory, than append the basename of
-                " l:oldfile to it and use it.
-                if isdirectory(l:name)
-                    let l:name = l:name . fnamemodify(l:oldfile, ':p:t')
-                endif
-
-            let v:errmsg = ""
-
-            let l:cpo_save = &cpoptions
-            set cpoptions-=A
-
-            silent! exe 'write ' . l:name
-
-            let &cpoptions = l:cpo_save
-
-            if v:errmsg != ""
-                echohl ErrorMsg
-                echomsg 'Copying file ' . l:oldfile . ' to ' . l:name . ' failed:'
-                echoerr v:errmsg
-                return 0
-            endif
-
-            silent! exe 'tabedit ' . l:name
-
-            if v:errmsg != ""
-                echohl ErrorMsg
-                echomsg 'tabopen file ' . l:oldfile . ' failed:'
-                echoerr v:errmsg
-                return 0
-            endif
-
-            return 1
-        endfunction
-
-        command! -nargs=1 -complete=customlist,RelativeFilesComplete
-              \ Copy call RelativeFunc(function('Copy'), <f-args>)
-        cabbrev cp Copy
-    " }
-
-    " Make a directory (relative to CWD) {
-        function! Mkdir(name)
-            let l:name = a:name
-
-                " If the l:name already exists, show an error message.
-                if isdirectory(l:name) || filereadable(l:name)
-                echohl ErrorMsg
-                echomsg 'Tried to create directory "' . l:name . '", but it already exists.'
-                return 0
-                endif
-
-            silent let l:output = system('mkdir -p ' . l:name)
-
-            if v:shell_error != 0
-                echohl ErrorMsg
-                echomsg 'Tried to create directory "' . l:name . '", but failed with error code "' . v:shell_error . '" and output:'
-                echoerr l:output
-                return 0
-            endif
-
-            return 1
-        endfunction
-
-        command! -nargs=1 -complete=customlist,RelativeFilesComplete
-              \ Mkdir call RelativeFunc(function('Mkdir'), <f-args>)
-        cabbrev mkdir Mkdir
     " }
 " }
 

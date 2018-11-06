@@ -1,14 +1,25 @@
 UNAME := $(shell uname -s)
-SHELL := /bin/bash # $(shell which bash)
+SHELL := $(shell which bash)
 ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-NIX_PATH := darwin=$(ROOT_DIR)nix-darwin:darwin-config=$(ROOT_DIR)config/nix-darwin:home-manager=$(ROOT_DIR)home-manager:home-manager-config=$(ROOT_DIR)config/home-manager:nix-overlays=$(ROOT_DIR)overlays:nixpkgs=$(ROOT_DIR)nixpkgs
+# NIX_PATH := darwin=$(ROOT_DIR)nix-darwin:darwin-config=$(ROOT_DIR)config/nix-darwin:home-manager=$(ROOT_DIR)home-manager:home-manager-config=$(ROOT_DIR)config/home-manager:nix-overlays=$(ROOT_DIR)overlays:nixpkgs=$(ROOT_DIR)nixpkgs-stable:nixpkgs-unstable=$(ROOT_DIR)nixpkgs-unstable:nixos-config
 
 # Install
 nix-install: sudo _nix-install
 
 darwin-install: sudo _darwin-install
 
+nixos-install:
+
 # Manage
+nixos-build:
+		@nixos-rebuild build
+		@rm result
+
+nixos-switch: sudo
+nixos-switch:
+		@sudo nixos-rebuild switch
+		@echo "# NixOS generation: $$(sudo nix-env -p /nix/var/nix/profiles/system --list-generations | tail -1)"
+
 darwin-build:
 		@nix build darwin.system
 		@rm result
@@ -86,8 +97,10 @@ endif
 
 pull:
 		@echo "# Updating repositories"
-		@echo "# Pulling nixpkgs"
-		@(cd nixpkgs      && git pull --rebase)
+		@echo "# Pulling nixpkgs-stable"
+		@(cd nixpkgs-stable   && git pull --rebase)
+		@echo "# Pulling nixpkgs-unstable"
+		@(cd nixpkgs-unstable && git pull --rebase)
 		@echo "# Pulling nix-darwin"
 		@(cd nix-darwin   && git pull --rebase)
 		@echo "# Pulling home-manager"
@@ -95,21 +108,24 @@ pull:
 
 tag-before:
 		@echo "# Tagging before update"
-		@git --git-dir=nixpkgs/.git branch -f before-update HEAD
+		@git --git-dir=nixpkgs-unstable/.git branch -f before-update HEAD
 
 tag-working:
 		@echo "# Tagging after update"
-		@git --git-dir=nixpkgs/.git branch -f last-known-good before-update
-		@git --git-dir=nixpkgs/.git branch -D before-update
+		@git --git-dir=nixpkgs-unstable/.git branch -f last-known-good before-update
+		@git --git-dir=nixpkgs-unstable/.git branch -D before-update
 
 mirror:
 		@echo "# Pushing changes to mirrors on pjan"
-		@git --git-dir=nixpkgs/.git push --mirror pjan
+		@git --git-dir=nixpkgs-unstable/.git push --mirror pjan
 		@git --git-dir=nix-darwin/.git push --mirror pjan
 		@git --git-dir=home-manager/.git push --mirror pjan
 
 done:
 		@echo "### ALL DONE ###"
+
+check:
+		@nix-store --verify --repair --check-contents
 
 gc:
 		@find $(HOME) \

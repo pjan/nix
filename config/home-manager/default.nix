@@ -20,17 +20,12 @@ in rec {
     PAGER         = "less";
     LESSHISTFILE  = "${xdg.cacheHome}/less/history";
     PARALLEL_HOME = "${xdg.cacheHome}/parallel";
-    EDITOR        = "${pkgs.vim}/bin/vim";
   };
 
   imports = [
-    ./modules/bash.nix
-    ./modules/curl.nix
-    ./modules/gpg.nix
-    ./modules/git.nix
     ./modules/ssh.nix
-    ./modules/weechat.nix
-    ./modules/wget.nix
+    # ./modules/weechat.nix
+    # ./modules/wget.nix
     ../shared/modules/nixpkgs.nix
   ];
 

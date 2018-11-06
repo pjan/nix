@@ -6,5 +6,6 @@ pkgs.buildEnv {
     cabal2nix
     cabal-install
     haskell-init
+    haskell-shell
   ];
 }

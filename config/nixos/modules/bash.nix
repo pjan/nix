@@ -3,6 +3,7 @@
 let
 
   git = "${pkgs.git}/bin/git";
+  fzf-share = "${pkgs.fzf}/share/fzf";
 
 in {
 
@@ -400,6 +401,10 @@ in {
 
       # dynamically set the  PS1
       PROMPT_COMMAND="pureline_ps1; $PROMPT_COMMAND"
+    '';
+
+    shellInitExtra = ''
+      source "${fzf-share}/key-bindings.bash"
     '';
 
     dircolors = ''

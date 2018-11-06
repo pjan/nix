@@ -27,7 +27,7 @@ pkgs.buildEnv {
     multitail
     renameutils
     p7zip
-    pass
+    # pass
     pass-otp
     parallel
     pv

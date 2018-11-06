@@ -18,6 +18,7 @@ in {
     ./modules/tmux.nix
     ../shared/modules/neovim.nix
     ../shared/modules/nix.nix
+    ../shared/modules/nixpkgs.nix
   ];
 
 }
