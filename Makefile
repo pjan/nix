@@ -6,7 +6,7 @@ ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 # Lazily evaluated variables; expensive to compute, but we only want it do it
 # when first necessary.
-GIT_DATE   = git --git-dir=nixpkgs/.git show -s --format=%cd --date=format:%Y%m%d_%H%M%S
+GIT_DATE   = git --git-dir=nixpkgs-unstable/.git show -s --format=%cd --date=format:%Y%m%d_%H%M%S
 HEAD_DATE  = $(eval HEAD_DATE := $(shell $(GIT_DATE) HEAD))$(HEAD_DATE)
 LKG_DATE   = $(eval LKG_DATE  := $(shell $(GIT_DATE) last-known-good))$(LKG_DATE)
 
