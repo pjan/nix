@@ -83,6 +83,8 @@ mirror:
 	@git --git-dir=nix-darwin/.git push --mirror pjan
 	@git --git-dir=home-manager/.git push --mirror pjan
 
+working: tag-working mirror
+
 update: tag-before pull rebuild working
 
 check:
