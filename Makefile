@@ -77,7 +77,7 @@ tag-working:
 mirror:
 	@echo "# Pushing changes to mirrors on pjan"
 	@git --git-dir=nixpkgs-unstable/.git push pjan -f master:master
-	@git --git-dir=nixpkgs-unstable/.git push pjan -f unstable:unstable
+	@git --git-dir=nixpkgs-unstable/.git push pjan -f nixpkgs-unstable:nixpkgs-unstable
 	@git --git-dir=nixpkgs-unstable/.git push pjan -f last-known-good:last-known-good
 	@git --git-dir=nixpkgs-unstable/.git push -f --tags pjan
 	@git --git-dir=nix-darwin/.git push --mirror pjan
