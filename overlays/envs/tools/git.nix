@@ -8,6 +8,7 @@ pkgs.buildEnv {
     diffutils
     ghi
     gist
+    git
     gitRepo
     # gitAndTools.git-imerge
     # gitAndTools.gitFull
