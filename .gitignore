@@ -3,6 +3,7 @@
 logs/
 private/
 result
+.metals
 
 *.DS_Store
 .AppleDouble

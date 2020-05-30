@@ -17,14 +17,13 @@ in {
   };
 
   apps = {
-    nixos      = self.callPackage ./envs/apps/nixos.nix     { };
     osx        = self.callPackage ./envs/apps/osx.nix       { };
   };
 
-  envs = {
-    ghc82          = self.haskell.envs.mkGhc82Env myHaskellPackages;
-    ghc82-profiled = self.haskell.envs.mkGhc82ProfiledEnv myHaskellPackages;
-  };
+  # envs = {
+  #   ghc82          = self.haskell.envs.mkGhc82Env myHaskellPackages;
+  #   ghc82-profiled = self.haskell.envs.mkGhc82ProfiledEnv myHaskellPackages;
+  # };
 
 }
 

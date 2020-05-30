@@ -10,6 +10,9 @@ in rec {
     configHome = "${homedir}/.config";
     dataHome   = "${homedir}/.local/share";
     cacheHome  = "${homedir}/.cache";
+
+
+
   };
 
   home.sessionVariables = {
@@ -23,7 +26,7 @@ in rec {
   };
 
   imports = [
-    ./modules/ssh.nix
+    # ./modules/ssh.nix
     # ./modules/weechat.nix
     # ./modules/wget.nix
     ../shared/modules/nixpkgs.nix

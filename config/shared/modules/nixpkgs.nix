@@ -8,6 +8,10 @@ in {
     config = {
       allowUnfree = true;
       allowBroken = true;
+			allowUnsupportedSystem = false;
+
+			permittedInsecurePackages = [
+      ];
     };
 
     overlays =

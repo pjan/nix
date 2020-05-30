@@ -5,6 +5,7 @@ pkgs.buildEnv {
   paths = with pkgs; [
     adns
     aria2
+		bandwhich
     cacert
     dnsutils
     httrack
@@ -12,7 +13,7 @@ pkgs.buildEnv {
     lftp
     mitmproxy
     mtr
-    ngrep
+    # ngrep
     nmap
     openssl
     openvpn

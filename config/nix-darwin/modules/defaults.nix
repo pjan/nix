@@ -4,20 +4,28 @@
     dock = {
       autohide = true;
       autohide-delay = "0.0";
-      autohide-time-modifier = "1.0";
+      autohide-time-modifier = ".0";
       dashboard-in-overlay = true;
       enable-spring-load-actions-on-all-items = true;
-      expose-animation-duration = "0.1";
+      expose-animation-duration = "0.25";
       expose-group-by-app = false;
       launchanim = false;
       mineffect = "scale";
       minimize-to-application = true;
       mouse-over-hilite-stack = true;
       mru-spaces = false;
+			orientation = "left";
       show-process-indicators = true;
       showhidden = true;
+			show-recents = false;
       tilesize = 24;
     };
+
+		loginwindow = {
+			ShutDownDisabledWhileLoggedIn = true;
+			PowerOffDisabledWhileLoggedIn = true;
+			RestartDisabledWhileLoggedIn = true;
+		};
 
     NSGlobalDomain = {
       AppleFontSmoothing = 1;
@@ -38,8 +46,8 @@
       NSUseAnimatedFocusRing = false;
       NSScrollAnimationEnabled = true;
       NSWindowResizeTime = "0.001";
-      InitialKeyRepeat = 5;
-      KeyRepeat = 1;
+      InitialKeyRepeat = 20;
+      KeyRepeat = 2;
       PMPrintingExpandedStateForPrint = true;
       PMPrintingExpandedStateForPrint2 = true;
       "com.apple.mouse.tapBehavior" = 1;

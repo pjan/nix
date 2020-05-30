@@ -6,16 +6,17 @@ in {
 
   environment = {
     systemPackages = with pkgs; [
-      git-tools
-      haskell-tools
-      js-tools
-      lang-tools
-      network-tools
-      nix-tools
-      osx-apps
-      scala-tools
-      security-tools
-      system-tools
+      tools.git
+      # haskell-tools
+      tools.js
+      tools.lang
+      tools.network
+      tools.nix
+			tools.security
+			tools.system
+      # osx-apps
+      # scala-tools
+      # system-tools
     ];
 
     pathsToLink = [

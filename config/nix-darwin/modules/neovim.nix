@@ -14,15 +14,14 @@ let
           fugitive
           fzf-vim
           fzfWrapper
-          ghc-mod-vim
-          gist-vim
-          haskell-vim
-          hoogle
+          # ghc-mod-vim
+          # haskell-vim
+          # hoogle
           lushtags
           multiple-cursors
-          neco-ghc
+          # neco-ghc
           deoplete-nvim
-          LanguageClient-neovim
+          # LanguageClient-neovim
           neosnippet
           neosnippet-snippets
           nerdcommenter
@@ -37,6 +36,7 @@ let
           undotree
           vim-airline
           vim-airline-themes
+					vim-gist
           vim-gitgutter
           vim-nerdtree-tabs
           vim-nix
@@ -64,7 +64,5 @@ in {
     ];
 
   environment.variables.EDITOR = "${neovim}/bin/nvim";
-
-  environment.etc."vim/snippets/haskell.snippets".source = ../../resources/vim/snippets/haskell.snippets;
 
 }

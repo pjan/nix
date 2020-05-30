@@ -6,10 +6,11 @@ pkgs.buildEnv {
     aspell
     aspellDicts.en
     aspellDicts.nl
-    bashInteractive
     bash-completion
+    bashInteractive
     nix-bash-completions
     coreutils
+		csvkit
     ctop
     cvc4
     direnv
@@ -24,9 +25,8 @@ pkgs.buildEnv {
     less
     gettext
     htop
-    multitail
+    # multitail
     renameutils
-    p7zip
     # pass
     pass-otp
     parallel

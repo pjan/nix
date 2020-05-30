@@ -7,6 +7,7 @@ pkgs.buildEnv {
     automake
     clang
     cmake
+		coreutils
     global
     gmp
     gnumake
