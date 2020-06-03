@@ -19,7 +19,7 @@ in {
   # programs.tmux.enableFzf = true;
   # programs.tmux.enableVim = true;
 
-  programs.tmux.tmuxConfig = ''
+  programs.tmux.extraConfig = ''
       # remap prefix to Control + a
       unbind C-b
       set-option -g prefix C-a

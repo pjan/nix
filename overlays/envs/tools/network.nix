@@ -24,6 +24,7 @@ pkgs.buildEnv {
     sipcalc
     spiped
     weechat
+		whois
     w3m
     wget
   ];

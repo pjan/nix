@@ -4,11 +4,11 @@ let
 
 in {
 
-  system.stateVersion = 4;
+  system.stateVersion = 2;
   services.activate-system.enable = true;
   services.nix-daemon.enable = false;
 
-  require = [
+  imports = import (<nix-overlays> + "/modules/nix-darwin") ++ [
     ./modules/bash.nix
     ./modules/defaults.nix
     # ./modules/gpg.nix
@@ -16,7 +16,7 @@ in {
     ./modules/neovim.nix
     ./modules/nix.nix
     ./modules/packages.nix
-    # ./modules/tmux.nix
+    ./modules/tmux.nix
     ../shared/modules/nixpkgs.nix
   ];
 
