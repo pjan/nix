@@ -20,4 +20,6 @@ in {
     ../shared/modules/nixpkgs.nix
   ];
 
+  programs.home-manager.enable = true;
+
 }
