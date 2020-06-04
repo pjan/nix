@@ -18,13 +18,13 @@ in {
       "pjan.cachix.org-1:APBhNys++s+B2mfQsTp5X1CiMpatiGxY0EpCMSLqvVg="
     ];
     nixPath =
-      [ "darwin-config=$HOME/Development/nix/config/nix-darwin"
-        "darwin=$HOME/Development/nix/nix-darwin"
-        "home-manager=$HOME/Development/nix/home-manager"
-        "home-manager-config=$HOME/Development/nix/config/home-manager"
-        "nixpkgs=$HOME/Development/nix/nixpkgs-unstable"
-        "nixpkgs-stable=$HOME/Development/nix/nixpkgs-stable"
-        "nix-overlays=$HOME/Development/nix/overlays"
+      [ "darwin-config=$HOME/src/nix/config/nix-darwin"
+        "darwin=$HOME/src/nix/nix-darwin"
+        "home-manager=$HOME/src/nix/home-manager"
+        "home-manager-config=$HOME/src/nix/config/home-manager"
+        "nixpkgs=$HOME/src/nix/nixpkgs-unstable"
+        "nixpkgs-stable=$HOME/src/nix/nixpkgs-stable"
+        "nix-overlays=$HOME/src/nix/overlays"
       ];
     package = pkgs.nixStable;
     extraOptions = ''

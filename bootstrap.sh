@@ -44,7 +44,7 @@ install_nix() {
   if [ -d "$HOME/.nix-profile/" ]; then
     echo "✗ Nix Package Manager already installed."
   else
-    bash <(curl https://nixos.org/nix/install)
+    sh <(curl https://nixos.org/nix/install) --darwin-use-unencrypted-nix-store-volume
     source ~/.nix-profile/etc/profile.d/nix.sh
     echo "✓ Nix Package Manager successfully installed."
   fi
@@ -66,7 +66,6 @@ install_darwin() {
 }
 
 go() {
-  do_sudo
   init_repo
   install_nix
   install_darwin
@@ -75,7 +74,7 @@ go() {
 go
 
 unset do_sudo
-unset update_repo
+unset init_repo
 unset install_nix
 unset install_darwin
 unset go
