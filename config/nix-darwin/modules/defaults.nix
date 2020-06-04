@@ -21,6 +21,10 @@
       tilesize = 24;
     };
 
+    finder = {
+      CreateDesktop = false;
+    };
+
 		loginwindow = {
 			ShutDownDisabledWhileLoggedIn = true;
 			PowerOffDisabledWhileLoggedIn = true;
