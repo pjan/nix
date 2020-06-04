@@ -280,7 +280,7 @@ in {
       # append to prompt: end the current promptline and start a newline
       function newline_module {
         if [ -n "$__last_color" ]; then
-					PS1+="$(tput sgr0)''${colors[$__last_color]}''${symbols[hard_separator]}$(tput sgr0)"
+					PS1+="\[$(tput sgr0)\]''${colors[$__last_color]}''${symbols[hard_separator]}\[$(tput sgr0)\]"
           # PS1+=$(section_end $__last_color 'DEFAULT')
         fi
         PS1+="\n"
@@ -296,7 +296,7 @@ in {
         done
         # final end point
         if [ -n "$__last_color" ]; then
-					PS1+="$(tput sgr0)''${colors[$__last_color]}''${symbols[hard_separator]}$(tput sgr0)"
+					PS1+="\[$(tput sgr0)\]''${colors[$__last_color]}''${symbols[hard_separator]}\[$(tput sgr0)\]"
         else
           PS1+="$"
         fi
