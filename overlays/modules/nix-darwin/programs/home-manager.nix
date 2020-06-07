@@ -30,6 +30,10 @@ in {
 
     environment.systemPackages = [ package ];
 
+    programs.shells.bash.shellInitExtra = ''
+      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+    '';
+
   };
 
 

@@ -4,6 +4,8 @@ let
 
   git = "${pkgs.git}/bin/git";
   fzf-share = "${pkgs.fzf}/share/fzf";
+  homeDirectory = config.home.homeDirectory;
+  xdg_dataHome = config.xdg.dataHome;
 
 in {
 
@@ -12,7 +14,7 @@ in {
 
     enableCompletion = true;
 
-    historyFile = "$HOME/.local/share/bash/history";
+    historyFile = "${xdg_dataHome}/bash/history";
     historyMemorySize = 10000;
     historyFileSize = 100000;
     historyControl = [
@@ -56,21 +58,40 @@ in {
       "..." = "cd ../..";
       "...." = "cd ../../..";
       "....." = "cd ../../../..";
+      ":src" = "cd ${homeDirectory}/src";
+      ":nix" = "cd ${homeDirectory}/src/nix";
+      ":desktop" = "cd ${homeDirectory}/Desktop";
+      ":downloads" = "cd ${homeDirectory}/Downloads";
 
-      # Applications
-      vi = "${pkgs.neovim}/bin/nvim";
+      # vi to nvim
+      vi = "nvim";
 
-      # lsstuff
+      # lsstuff - use lsd
       ls = "${pkgs.coreutils}/bin/ls --color";
-      ll = "ls -ahlF";
-      la = "ls -A";
+      ll = "ls -AhlF";
       lf = "ls -lF";
+      lsd = "${pkgs.lsd}/bin/lsd";
+      lld = "lsd -AhlF";
+      lfd = "lsd -lF";
+      ltd = "lsd --tree";
+
+      # trim empty lines and copy to clipboard
+      copy = "tr -d '\n' | pbcopy";
+
+      # Run a speedtest
+      speedtest = "${pkgs.speedtest-cli}/bin/speedtest";
+
+      # Get the weather
+      weather = "do_weather";
+
+      # Make directory and cd into it
+      mkd = "do_mkd";
 
       # Secure remove
       "rm!" = "${pkgs.srm}/bin/srm -vfr";
 
 			# Gzip-enabled curl
-			gurl = "${pkgs.curl} --compressed";
+			gurl = "${pkgs.curl}/bin/curl --compressed";
 
 			# IP Addresses
 			ip = "${pkgs.dnsutils}/bin/dig +short myip.opendns.com @resolver1.opendns.com";
@@ -382,6 +403,15 @@ in {
 
     shellInitExtra = ''
       source "${fzf-share}/key-bindings.bash"
+
+      do_mkd(){
+        ${pkgs.coreutils}/bin/mkdir -p $1
+        cd $1
+      }
+
+      do_weather(){
+        ${pkgs.curl}/bin/curl -H "Accept-Language: en" -H "User-Agent: curl/7.64.1" http://wttr.in/$1
+      }
     '';
 
     dircolors = ''

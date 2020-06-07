@@ -303,7 +303,7 @@
         " Use deoplete
         let g:deoplete#enable_at_startup = 1
         " Use smartcase.
-        let g:deoplete#enable_smart_case = 1
+        " let g:deoplete#enable_smart_case = 1
 
         " <CR>: close popup and save indent.
         inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>

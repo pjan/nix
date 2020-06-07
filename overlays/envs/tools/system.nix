@@ -46,6 +46,5 @@ pkgs.buildEnv {
     z3
     youtube-dl
     zip
-    zsh
   ];
 }
