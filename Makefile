@@ -13,7 +13,7 @@ LKG_DATE   = $(eval LKG_DATE  := $(shell $(GIT_DATE) last-known-good))$(LKG_DATE
 BUILDPATH = /run/current-system
 BUILD_ARGS = --keep-going --argstr version $(HEAD_DATE)
 
-NIXPATH = darwin=$(ROOT_DIR)nix-darwin:darwin-config=$(ROOT_DIR)config/nix-darwin:home-manager=$(ROOT_DIR)home-manager:home-manager-config=$(ROOT_DIR)config/home-manager:nix-overlays=$(ROOT_DIR)overlays:nixpkgs=$(ROOT_DIR)nixpkgs-unstable:nixpkgs-stable=$(ROOT_DIR)nixpkgs-stable
+NIXPATH = darwin=$(ROOT_DIR)nix-darwin:darwin-config=$(ROOT_DIR)config/nix-darwin:home-manager=$(ROOT_DIR)home-manager:home-manager-config=$(ROOT_DIR)config/home-manager:nixpkgs-overlays=$(ROOT_DIR)overlays:nixpkgs=$(ROOT_DIR)nixpkgs-unstable:nixpkgs-stable=$(ROOT_DIR)nixpkgs-stable
 PRENIX  = NIX_PATH=$(NIXPATH)
 
 NIX        = $(PRENIX) nix

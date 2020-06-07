@@ -24,7 +24,7 @@ in {
         "home-manager-config=$HOME/src/nix/config/home-manager"
         "nixpkgs=$HOME/src/nix/nixpkgs-unstable"
         "nixpkgs-stable=$HOME/src/nix/nixpkgs-stable"
-        "nix-overlays=$HOME/src/nix/overlays"
+        "nixpkgs-overlays=$HOME/src/nix/overlays"
       ];
     package = pkgs.nixStable;
     extraOptions = ''

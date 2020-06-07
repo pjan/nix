@@ -5,7 +5,7 @@ LATEST_STABLE=nixpkgs-20.03-darwin
 
 # Variables
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE}")"; pwd -P)"
-NIXPATH="darwin=$ROOT_DIR/nix-darwin:darwin-config=$ROOT_DIR/config/nix-darwin:home-manager=$ROOT_DIR/home-manager:home-manager-config=$ROOT_DIR/config/home-manager:nix-overlays=$ROOT_DIR/overlays:nixpkgs=$ROOT_DIR/nixpkgs-unstable:nixpkgs-stable=$ROOT_DIR/nixpkgs-stable"
+NIXPATH="darwin=$ROOT_DIR/nix-darwin:darwin-config=$ROOT_DIR/config/nix-darwin:home-manager=$ROOT_DIR/home-manager:home-manager-config=$ROOT_DIR/config/home-manager:nixpkgs-overlays=$ROOT_DIR/overlays:nixpkgs=$ROOT_DIR/nixpkgs-unstable:nixpkgs-stable=$ROOT_DIR/nixpkgs-stable"
 
 # Functions
 do_sudo() {
@@ -46,6 +46,7 @@ install_nix() {
   else
     sh <(curl https://nixos.org/nix/install) --darwin-use-unencrypted-nix-store-volume
     source ~/.nix-profile/etc/profile.d/nix.sh
+    nix-channel --remove nixpkgs
     echo "✓ Nix Package Manager successfully installed."
   fi
 }
