@@ -15,8 +15,8 @@ pkgs.buildEnv {
     # gitAndTools.gitflow
     gitAndTools.hub
     gitAndTools.tig
-    # gitAndTools.git-annex
-    # gitAndTools.git-annex-remote-rclone
+    gitAndTools.git-annex
+    gitAndTools.git-annex-remote-rclone
     patch
     patchutils
     travis
