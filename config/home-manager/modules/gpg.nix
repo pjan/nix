@@ -14,7 +14,7 @@
     pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac
   '';
 
-  config.xdg.configFile."gnupg/gog.conf".text = ''
+  config.xdg.configFile."gnupg/gpg.conf".text = ''
     personal-cipher-preferences AES256 AES192 AES CAST5
     personal-digest-preferences SHA512 SHA384 SHA256 SHA224
     personal-compress-preferences ZLIB BZIP2 ZIP Uncompressed
