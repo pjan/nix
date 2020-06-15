@@ -8,20 +8,17 @@ in {
     config = {
       allowUnfree = true;
       allowBroken = true;
-			allowUnsupportedSystem = false;
+      allowUnsupportedSystem = false;
 
-			permittedInsecurePackages = [
-      ];
+      permittedInsecurePackages = [ ];
     };
 
-    overlays =
-      let
-        path = ../../.. + "/overlays";
-      in with builtins;
-      map (n: import (path + ("/" + n)))
-          (filter (n: match ".*\\.nix" n != null ||
-                      pathExists (path + ("/" + n + "/default.nix")))
-                      (attrNames (readDir path)));
+    overlays = let path = ../../.. + "/overlays";
+    in with builtins;
+    map (n: import (path + ("/" + n))) (filter (n:
+      match ".*\\.nix" n != null
+      || pathExists (path + ("/" + n + "/default.nix")))
+      (attrNames (readDir path)));
   };
 
 }

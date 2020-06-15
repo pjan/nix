@@ -3,7 +3,7 @@
 {
 
   config.home.sessionVariables = {
-    GNUPGHOME     = "${config.xdg.configHome}/gnupg";
+    GNUPGHOME = "${config.xdg.configHome}/gnupg";
     SSH_AUTH_SOCK = "${config.xdg.configHome}/gnupg/S.gpg-agent.ssh";
   };
 

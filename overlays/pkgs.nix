@@ -5,6 +5,9 @@ rec {
   # applications/version-management
   ghi           = super.callPackage ./pkgs/applications/version-management/git-and-tools/ghi { };
 
+  #
+  jupyterWith   = super.callPackage ./pkgs/applications/editors/jupyterWith { };
+
   # development/haskell-modules
   haskell-init  = super.callPackage ./pkgs/development/haskell-modules/haskell-init { };
   haskell-shell = super.callPackage ./pkgs/development/haskell-modules/haskell-shell { };

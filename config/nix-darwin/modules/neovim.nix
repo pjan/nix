@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -36,7 +36,7 @@ let
           undotree
           vim-airline
           vim-airline-themes
-					vim-gist
+          vim-gist
           vim-gitgutter
           vim-nerdtree-tabs
           vim-nix
@@ -46,7 +46,7 @@ let
           vimproc
           webapi-vim
         ];
-        opt = [];
+        opt = [ ];
       };
 
       customRC = builtins.readFile ../../resources/vim/vimrc;
@@ -58,10 +58,7 @@ let
 
 in {
 
-  environment.systemPackages =
-    [
-      neovim
-    ];
+  environment.systemPackages = [ neovim ];
 
   environment.variables.EDITOR = "${neovim}/bin/nvim";
 

@@ -4,9 +4,7 @@ let
 
 in {
 
-  environment.systemPackages = [
-    pkgs.gnupg
-  ];
+  environment.systemPackages = [ pkgs.gnupg ];
 
   programs.shells.bash.shellInitExtra = ''
     export GPG_TTY=$(tty)

@@ -15,6 +15,7 @@ pkgs.buildEnv {
     cvc4
     direnv
     exiv2
+    fdupes
     findutils
     fzf
     gnugrep

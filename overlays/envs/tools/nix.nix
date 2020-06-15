@@ -10,5 +10,6 @@ pkgs.buildEnv {
     nix-index
     nix-info
     nix-prefetch-scripts
+    nixfmt
   ];
 }

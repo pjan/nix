@@ -48,46 +48,51 @@ let
 
 in {
 
-  environment.systemPackages = [
-    pkgs.tor
-    pkgs.proxy-toggle
-  ];
+  environment.systemPackages = [ pkgs.tor pkgs.proxy-toggle ];
 
-  launchd.user.agents =
-    let
-      runCommand = command: {
-          inherit command;
-          serviceConfig.RunAtLoad = true;
-          serviceConfig.KeepAlive = true;
-        };
-
-    in {
-
-      haproxy = runCommand "${pkgs.haproxy}/bin/haproxy -- /etc/haproxy.conf";
-
-      privoxy1 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config1";
-      privoxy2 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config2";
-      privoxy3 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config3";
-      privoxy4 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config4";
-      privoxy5 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config5";
-      privoxy6 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config6";
-      privoxy7 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config7";
-      privoxy8 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config8";
-      privoxy9 = runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config9";
-
-      tor1 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc1";
-      tor2 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc2";
-      tor3 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc3";
-      tor4 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc4";
-      tor5 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc5";
-      tor6 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc6";
-      tor7 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc7";
-      tor8 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc8";
-      tor9 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc9";
-
+  launchd.user.agents = let
+    runCommand = command: {
+      inherit command;
+      serviceConfig.RunAtLoad = true;
+      serviceConfig.KeepAlive = true;
     };
 
-   environment.etc = {
+  in {
+
+    haproxy = runCommand "${pkgs.haproxy}/bin/haproxy -- /etc/haproxy.conf";
+
+    privoxy1 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config1";
+    privoxy2 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config2";
+    privoxy3 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config3";
+    privoxy4 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config4";
+    privoxy5 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config5";
+    privoxy6 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config6";
+    privoxy7 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config7";
+    privoxy8 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config8";
+    privoxy9 =
+      runCommand "${pkgs.privoxy}/bin/privoxy --no-daemon /etc/privoxy/config9";
+
+    tor1 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc1";
+    tor2 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc2";
+    tor3 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc3";
+    tor4 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc4";
+    tor5 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc5";
+    tor6 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc6";
+    tor7 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc7";
+    tor8 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc8";
+    tor9 = runCommand "${pkgs.tor}/bin/tor -f /etc/torrc9";
+
+  };
+
+  environment.etc = {
 
     "haproxy.conf".text = ''
       global

@@ -11,8 +11,8 @@ in {
       tools.lang
       tools.network
       tools.nix
-			tools.security
-			tools.system
+      tools.security
+      tools.system
       scripts
     ];
 
@@ -24,6 +24,7 @@ in {
       "/share"
       "/fonts"
       "/Applications"
+      "/share/nix-direnv"
     ];
 
   };

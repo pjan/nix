@@ -17,20 +17,8 @@ in {
     historyFile = "${xdg_dataHome}/bash/history";
     historyMemorySize = 10000;
     historyFileSize = 100000;
-    historyControl = [
-      "erasedups"
-      "ignoredups"
-      "ignorespace"
-    ];
-    historyIgnore = [
-      "ls"
-      "cd"
-      "\"cd -\""
-      "pwd"
-      "exit"
-      "date"
-      "\"* --help\""
-    ];
+    historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
+    historyIgnore = [ "ls" "cd" ''"cd -"'' "pwd" "exit" "date" ''"* --help"'' ];
 
     shellOptions = [
       # Append to the Bash history file, rather than overwriting it
@@ -58,10 +46,12 @@ in {
       "..." = "cd ../..";
       "...." = "cd ../../..";
       "....." = "cd ../../../..";
+      ":archive" = "cd ${homeDirectory}/Archive";
+      ":desktop" = "cd ${homeDirectory}/Desktop";
+      ":documents" = "cd ${homeDirectory}/Documents";
+      ":downloads" = "cd ${homeDirectory}/Downloads";
       ":src" = "cd ${homeDirectory}/src";
       ":nix" = "cd ${homeDirectory}/src/nix";
-      ":desktop" = "cd ${homeDirectory}/Desktop";
-      ":downloads" = "cd ${homeDirectory}/Downloads";
 
       # vi to nvim
       vi = "nvim";
@@ -76,7 +66,9 @@ in {
       ltd = "lsd --tree";
 
       # trim empty lines and copy to clipboard
-      copy = "tr -d '\n' | pbcopy";
+      copy = ''
+        tr -d '
+        ' | pbcopy'';
 
       # Run a speedtest
       speedtest = "${pkgs.speedtest-cli}/bin/speedtest";
@@ -90,316 +82,317 @@ in {
       # Secure remove
       "rm!" = "${pkgs.srm}/bin/srm -vfr";
 
-			# Gzip-enabled curl
-			gurl = "${pkgs.curl}/bin/curl --compressed";
+      # Gzip-enabled curl
+      gurl = "${pkgs.curl}/bin/curl --compressed";
 
-			# IP Addresses
-			ip = "${pkgs.dnsutils}/bin/dig +short myip.opendns.com @resolver1.opendns.com";
+      # IP Addresses
+      ip =
+        "${pkgs.dnsutils}/bin/dig +short myip.opendns.com @resolver1.opendns.com";
 
-			# Reload the shell
-			reload = "exec $SHELL -l";
+      # Reload the shell
+      reload = "exec $SHELL -l";
     };
 
     promptInit = ''
-      # -----------------------------------------------------------------------------
-      # returns a string with the powerline symbol for a section end
-      # arg: $1 is foreground color of the next section
-      # arg: $2 is background color of the next section
-      function section_end {
-        if [ "$__last_color" == "$2" ]; then
-          # Section colors are the same, use a foreground separator
-          local end_char="''${symbols[soft_separator]}"
-          local fg=$1
-        else
-          # section colors are different, use a background separator
-          local end_char="''${symbols[hard_separator]}"
-          local fg=$__last_color
-        fi
-        if [ -n "$__last_color" ]; then
-          echo "''${colors[$fg]}''${colors[BG_$2]}$end_char"
-        fi
-      }
-      # -----------------------------------------------------------------------------
-      # returns a string with background and foreground colours set
-      # arg: $1 foreground color
-      # arg: $2 background color
-      # arg: $3 content
-      function section_content {
-        echo "''${colors[$1]}''${colors[BG_$2]}$3"
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: root user notification
-      # arg: $1 background color
-      # arg: $2 foreground color
-      function root_module {
-        if [[ ''${EUID} = 0 ]]; then
-          local bg=$1
-          local fg=$2
-          local content="!"
-          PS1+=$(section_end $fg $bg)
-          PS1+=$(section_content $fg $bg " $content ")
-          __last_color=$bg
-        fi
-      }
-      #------------------------------------------------------------------------------
-      # append to prompt: user@host or user or root@host
-      # arg: $1 background color
-      # arg: $2 background color when connected over ssh
-      # arg: $3 foreground color
-      function user_host_module {
-        local bg=$1
-        local fg=$3
-        local content="\u@\h"
-        if [[ "''${SSH_TTY}" || "''${SSH_CLIENT}" ]]; then
-          bg=$2
-        fi
-        PS1+=$(section_end $fg $bg)
-        PS1+=$(section_content $fg $bg " $content ")
-        __last_color=$bg
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: current directory
-      # arg: $1 background color
-      # arg; $2 foreground color
-      # optional arg: $3 - 0 — fullpath, 1 — current dir, [x] — trim to x number of
-      # directories
-      function path_module {
-        local bg=$1
-        local fg=$2
-        local content="\w"
-        if [ $3 -eq 1 ]; then
-          local content="\W"
-        elif [ $3 -gt 1 ]; then
-          PROMPT_DIRTRIM=$3
-        fi
-        PS1+=$(section_end $fg $bg)
-        PS1+=$(section_content $fg $bg " $content ")
-        __last_color=$bg
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: the number of background jobs running
-      # arg: $1 foreground color
-      # arg; $2 background color
-      function jobs_module {
-        local bg_color=$1
-        local fg_color=$2
-        local number_jobs=$(jobs -p | wc -l)
-        if [ ! "$number_jobs" -eq 0 ]; then
-          PS1+=$(section_end $fg_color $bg_color)
-          PS1+=$(section_content $fg_color $bg_color " ''${symbols[enter]} $number_jobs ")
-          __last_color=$bg_color
-        fi
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: indicator if the current directory is ready-only
-      # arg: $1 foreground color
-      # arg; $2 background color
-      function read_only_module {
-        local bg_color=$1
-        local fg_color=$2
-        if [ ! -w "$PWD" ]; then
-          PS1+=$(section_end $fg_color $bg_color)
-          PS1+=$(section_content $fg_color $bg_color " ''${symbols[lock]} ")
-          __last_color=$bg_color
-        fi
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: git branch with indictors
-      # arg: $1 foreground color
-      # arg; $2 background color
-      # arg: $3 background color used if the working directory is dirty
-      function git_module {
-        local git_branch=$(${git} symbolic-ref --quiet --short HEAD 2> /dev/null) || $(${git} rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if [ -n "$git_branch" ]; then
-          # Ensure the index is up to date
-          ${git} update-index --really-refresh -q &>/dev/null;
-          local content="''${symbols[git]} $git_branch"
-          local bg=$1
-          local fg=$2
-          if [ -n "$3" -a -n "$(git status --porcelain --ignore-submodules)" ]; then
-            bg=$3
-          fi
-          local status=""
-          local number_modified=$(${git} diff --ignore-submodules --name-only --diff-filter=M 2> /dev/null | wc -l )
-          if [ ! "$number_modified" -eq "0" ]; then
-            status+="''${symbols[plus]}" # $number_modified"
-          fi
-          local number_staged=$(${git} diff --ignore-submodules --staged --name-only --diff-filter=AM 2> /dev/null | wc -l)
-          if [ ! "$number_staged" -eq "0" ]; then
-            status+="''${symbols[tick]}" # $number_staged"
-          fi
-          local number_conflicts=$(${git} diff --ignore-submodules --name-only --diff-filter=U 2> /dev/null | wc -l)
-          if [ ! "$number_conflicts" -eq "0" ]; then
-            status+="''${symbols[cross]}" # $number_conflicts"
-          fi
-          local number_untracked=$(${git} ls-files --other --exclude-standard | wc -l)
-          if [ ! "$number_untracked" -eq "0" ]; then
-            status+="''${symbols[untracked]}" # $number_untracked"
-          fi
-          content+=" $status"
-          local number_stash=$(${git} stash --ignore-submodules list 2>/dev/null | wc -l)
-          if [ ! "$number_stash" -eq 0 ]; then
-            content+=" ''${symbols[soft_separator]} ''${symbols[stash]}$number_stash"
-          fi
-          local number_behind_ahead=$(${git} rev-list --ignore-submodules --count --left-right '@{upstream}...HEAD' 2>/dev/null)
-          local number_ahead="''${number_behind_ahead#*	}"
-          local number_behind="''${number_behind_ahead%	*}"
-          if [ ! "0$number_ahead" -eq 0 -o ! "0$number_behind" -eq 0 ]; then
-            if [ ! "$number_ahead" -eq 0 ]; then
-              content+=" ''${symbols[soft_separator]} ''${symbols[ahead]} $number_ahead"
-            fi
-            if [ ! "$number_behind" -eq 0 ]; then
-              content+=" ''${symbols[soft_separator]} ''${symbols[behind]} $number_behind"
-            fi
-          fi
-          PS1+=$(section_end $fg $bg)
-          PS1+=$(section_content $fg $bg " $content ")
-          __last_color=$bg
-        fi
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: optionally append return code for previous command
-      # arg: $1 background color
-      # arg; $2 foreground color
-      function return_code_module {
-        if [ ! "$__return_code" -eq 0 ] && [ ! "$__return_code" -eq 130 ]; then
-          local bg=$1
-          local fg=$2
-          local content=" ''${symbols[flag]} $__return_code "
-          PS1+=$(section_end $fg $bg)
-          PS1+=$(section_content $fg $bg "$content")
-          __last_color=$bg
-        fi
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: a nice prompt symbol
-      # arg: $1 background color
-      # arg: $2 foreground color
-      function prompt_module {
-        local bg=$1
-        local fg=$2
-        local content=" ''${symbols[prompt]}"
-        PS1+=$(section_end $fg $bg)
-        PS1+=$(section_content $fg $bg "$content")
-        __last_color=$bg
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: is nix shell
-      # arg: $1 background color
-      # arg: $2 foreground color
-      function nix_shell_module {
-        if [ -n "$IN_NIX_SHELL" ]; then
-          local bg=$1
-          local fg=$2
-          local content=" NIX"
-          PS1+=$(section_end $fg $bg)
-          PS1+=$(section_content $fg $bg "$content ")
-          __last_color=$bg
-        fi
-      }
-      # -----------------------------------------------------------------------------
-      # append to prompt: end the current promptline and start a newline
-      function newline_module {
-        if [ -n "$__last_color" ]; then
-					PS1+="\[$(tput sgr0)\]''${colors[$__last_color]}''${symbols[hard_separator]}\[$(tput sgr0)\]"
-          # PS1+=$(section_end $__last_color 'DEFAULT')
-        fi
-        PS1+="\n"
-        unset __last_color
-      }
-      # -----------------------------------------------------------------------------
-      function pureline_ps1 {
-        __return_code=$?      # save the return code
-        PS1="\n"
-        # load the modules
-        for module in "''${!pureline_modules[@]}"; do
-          ''${pureline_modules[$module]}
-        done
-        # final end point
-        if [ -n "$__last_color" ]; then
-					PS1+="\[$(tput sgr0)\]''${colors[$__last_color]}''${symbols[hard_separator]}\[$(tput sgr0)\]"
-        else
-          PS1+="$"
-        fi
-        # cleanup
-        PS1+="\[\e[K\] "
-        unset __last_color
-        unset __return_code
-      }
-      # -----------------------------------------------------------------------------
-      # define the basic color set
-      declare -A colors=(
-        [DEFAULT]='\[\e[38;5;12m\]'
-        [BASE03]='\[\e[38;5;8m\]'
-        [BASE02]='\[\e[38;5;0m\]'
-        [BASE01]='\[\e[38;5;10m\]'
-        [BASE00]='\[\e[38;5;11m\]'
-        [BASE0]='\[\e[38;5;12m\]'
-        [BASE1]='\[\e[38;5;14m\]'
-        [BASE2]='\[\e[38;5;7m\]'
-        [BASE3]='\[\e[38;5;15m\]'
-        [YELLOW]='\[\e[38;5;3m\]'
-        [ORANGE]='\[\e[38;5;9m\]'
-        [RED]='\[\e[38;5;1m\]'
-        [MAGENTA]='\[\e[38;5;5m\]'
-        [VIOLET]='\[\e[38;5;13m\]'
-        [BLUE]='\[\e[38;5;4m\]'
-        [CYAN]='\[\e[38;5;6m\]'
-        [GREEN]='\[\e[38;5;2m\]'
-        [BLACK]='\[\e[38;5;16m\]'
-        [BG_DEFAULT]='\[\e[48;5;8m\]'
-        [BG_BASE03]='\[\e[48;5;8m\]'
-        [BG_BASE02]='\[\e[48;5;0m\]'
-        [BG_BASE01]='\[\e[48;5;10m\]'
-        [BG_BASE00]='\[\e[48;5;11m\]'
-        [BG_BASE0]='\[\e[48;5;12m\]'
-        [BG_BASE1]='\[\e[48;5;14m\]'
-        [BG_BASE2]='\[\e[48;5;7m\]'
-        [BG_BASE3]='\[\e[48;5;15m\]'
-        [BG_YELLOW]='\[\e[48;5;3m\]'
-        [BG_ORANGE]='\[\e[48;5;9m\]'
-        [BG_RED]='\[\e[48;5;1m\]'
-        [BG_MAGENTA]='\[\e[48;5;5m\]'
-        [BG_VIOLET]='\[\e[48;5;13m\]'
-        [BG_BLUE]='\[\e[48;5;4m\]'
-        [BG_CYAN]='\[\e[48;5;6m\]'
-        [BG_GREEN]='\[\e[48;5;2m\]'
-        [BG_BLACK]='\[\e[48;5;16m\]'
-      )
-      # define symbols
-      declare -A symbols=(
-        [hard_separator]=""
-        [soft_separator]=""
-        [git]=""
-        [lock]=""
-        [flag]="⚑"
-        [plus]="✚"
-        [tick]="✔"
-        [cross]="✘"
-        [enter]="⏎"
-        [prompt]="λ"
-        [battery_charging]="⚡"
-        [battery_discharging]="▮"
-        [untracked]="?"
-        [stash]="☰"
-        [ahead]="⬆"
-        [behind]="⬇"
-      )
-      # define default modules to load
-      declare -a pureline_modules=(
-        'root_module        RED         BASE3'
-        'user_host_module   BASE01      ORANGE      BASE3'
-        'path_module        BLUE        BASE3       3'
-        'read_only_module   RED         BASE3'
-        'git_module         GREEN       BASE3       ORANGE'
-        'newline_module'
-        'nix_shell_module   CYAN        BASE3'
-        'return_code_module RED         BASE3'
-        'prompt_module      BASE02      BASE0'
-      )
-      # dynamically set the  PS1
-      PROMPT_COMMAND="pureline_ps1; $PROMPT_COMMAND"
-    '';
+            # -----------------------------------------------------------------------------
+            # returns a string with the powerline symbol for a section end
+            # arg: $1 is foreground color of the next section
+            # arg: $2 is background color of the next section
+            function section_end {
+              if [ "$__last_color" == "$2" ]; then
+                # Section colors are the same, use a foreground separator
+                local end_char="''${symbols[soft_separator]}"
+                local fg=$1
+              else
+                # section colors are different, use a background separator
+                local end_char="''${symbols[hard_separator]}"
+                local fg=$__last_color
+              fi
+              if [ -n "$__last_color" ]; then
+                echo "''${colors[$fg]}''${colors[BG_$2]}$end_char"
+              fi
+            }
+            # -----------------------------------------------------------------------------
+            # returns a string with background and foreground colours set
+            # arg: $1 foreground color
+            # arg: $2 background color
+            # arg: $3 content
+            function section_content {
+              echo "''${colors[$1]}''${colors[BG_$2]}$3"
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: root user notification
+            # arg: $1 background color
+            # arg: $2 foreground color
+            function root_module {
+              if [[ ''${EUID} = 0 ]]; then
+                local bg=$1
+                local fg=$2
+                local content="!"
+                PS1+=$(section_end $fg $bg)
+                PS1+=$(section_content $fg $bg " $content ")
+                __last_color=$bg
+              fi
+            }
+            #------------------------------------------------------------------------------
+            # append to prompt: user@host or user or root@host
+            # arg: $1 background color
+            # arg: $2 background color when connected over ssh
+            # arg: $3 foreground color
+            function user_host_module {
+              local bg=$1
+              local fg=$3
+              local content="\u@\h"
+              if [[ "''${SSH_TTY}" || "''${SSH_CLIENT}" ]]; then
+                bg=$2
+              fi
+              PS1+=$(section_end $fg $bg)
+              PS1+=$(section_content $fg $bg " $content ")
+              __last_color=$bg
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: current directory
+            # arg: $1 background color
+            # arg; $2 foreground color
+            # optional arg: $3 - 0 — fullpath, 1 — current dir, [x] — trim to x number of
+            # directories
+            function path_module {
+              local bg=$1
+              local fg=$2
+              local content="\w"
+              if [ $3 -eq 1 ]; then
+                local content="\W"
+              elif [ $3 -gt 1 ]; then
+                PROMPT_DIRTRIM=$3
+              fi
+              PS1+=$(section_end $fg $bg)
+              PS1+=$(section_content $fg $bg " $content ")
+              __last_color=$bg
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: the number of background jobs running
+            # arg: $1 foreground color
+            # arg; $2 background color
+            function jobs_module {
+              local bg_color=$1
+              local fg_color=$2
+              local number_jobs=$(jobs -p | wc -l)
+              if [ ! "$number_jobs" -eq 0 ]; then
+                PS1+=$(section_end $fg_color $bg_color)
+                PS1+=$(section_content $fg_color $bg_color " ''${symbols[enter]} $number_jobs ")
+                __last_color=$bg_color
+              fi
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: indicator if the current directory is ready-only
+            # arg: $1 foreground color
+            # arg; $2 background color
+            function read_only_module {
+              local bg_color=$1
+              local fg_color=$2
+              if [ ! -w "$PWD" ]; then
+                PS1+=$(section_end $fg_color $bg_color)
+                PS1+=$(section_content $fg_color $bg_color " ''${symbols[lock]} ")
+                __last_color=$bg_color
+              fi
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: git branch with indictors
+            # arg: $1 foreground color
+            # arg; $2 background color
+            # arg: $3 background color used if the working directory is dirty
+            function git_module {
+              local git_branch=$(${git} symbolic-ref --quiet --short HEAD 2> /dev/null) || $(${git} rev-parse --abbrev-ref HEAD 2> /dev/null)
+              if [ -n "$git_branch" ]; then
+                # Ensure the index is up to date
+                ${git} update-index --really-refresh -q &>/dev/null;
+                local content="''${symbols[git]} $git_branch"
+                local bg=$1
+                local fg=$2
+                if [ -n "$3" -a -n "$(git status --porcelain --ignore-submodules)" ]; then
+                  bg=$3
+                fi
+                local status=""
+                local number_modified=$(${git} diff --ignore-submodules --name-only --diff-filter=M 2> /dev/null | wc -l )
+                if [ ! "$number_modified" -eq "0" ]; then
+                  status+="''${symbols[plus]}" # $number_modified"
+                fi
+                local number_staged=$(${git} diff --ignore-submodules --staged --name-only --diff-filter=AM 2> /dev/null | wc -l)
+                if [ ! "$number_staged" -eq "0" ]; then
+                  status+="''${symbols[tick]}" # $number_staged"
+                fi
+                local number_conflicts=$(${git} diff --ignore-submodules --name-only --diff-filter=U 2> /dev/null | wc -l)
+                if [ ! "$number_conflicts" -eq "0" ]; then
+                  status+="''${symbols[cross]}" # $number_conflicts"
+                fi
+                local number_untracked=$(${git} ls-files --other --exclude-standard | wc -l)
+                if [ ! "$number_untracked" -eq "0" ]; then
+                  status+="''${symbols[untracked]}" # $number_untracked"
+                fi
+                content+=" $status"
+                local number_stash=$(${git} stash --ignore-submodules list 2>/dev/null | wc -l)
+                if [ ! "$number_stash" -eq 0 ]; then
+                  content+=" ''${symbols[soft_separator]} ''${symbols[stash]}$number_stash"
+                fi
+                local number_behind_ahead=$(${git} rev-list --ignore-submodules --count --left-right '@{upstream}...HEAD' 2>/dev/null)
+                local number_ahead="''${number_behind_ahead#*	}"
+                local number_behind="''${number_behind_ahead%	*}"
+                if [ ! "0$number_ahead" -eq 0 -o ! "0$number_behind" -eq 0 ]; then
+                  if [ ! "$number_ahead" -eq 0 ]; then
+                    content+=" ''${symbols[soft_separator]} ''${symbols[ahead]} $number_ahead"
+                  fi
+                  if [ ! "$number_behind" -eq 0 ]; then
+                    content+=" ''${symbols[soft_separator]} ''${symbols[behind]} $number_behind"
+                  fi
+                fi
+                PS1+=$(section_end $fg $bg)
+                PS1+=$(section_content $fg $bg " $content ")
+                __last_color=$bg
+              fi
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: optionally append return code for previous command
+            # arg: $1 background color
+            # arg; $2 foreground color
+            function return_code_module {
+              if [ ! "$__return_code" -eq 0 ] && [ ! "$__return_code" -eq 130 ]; then
+                local bg=$1
+                local fg=$2
+                local content=" ''${symbols[flag]} $__return_code "
+                PS1+=$(section_end $fg $bg)
+                PS1+=$(section_content $fg $bg "$content")
+                __last_color=$bg
+              fi
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: a nice prompt symbol
+            # arg: $1 background color
+            # arg: $2 foreground color
+            function prompt_module {
+              local bg=$1
+              local fg=$2
+              local content=" ''${symbols[prompt]} "
+              PS1+=$(section_end $fg $bg)
+              PS1+=$(section_content $fg $bg "$content")
+              __last_color=$bg
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: is nix shell
+            # arg: $1 background color
+            # arg: $2 foreground color
+            function nix_shell_module {
+              if [ -n "$IN_NIX_SHELL" ]; then
+                local bg=$1
+                local fg=$2
+                local content=" NIX"
+                PS1+=$(section_end $fg $bg)
+                PS1+=$(section_content $fg $bg "$content ")
+                __last_color=$bg
+              fi
+            }
+            # -----------------------------------------------------------------------------
+            # append to prompt: end the current promptline and start a newline
+            function newline_module {
+              if [ -n "$__last_color" ]; then
+      					PS1+="\[$(tput sgr0)\]''${colors[$__last_color]}''${symbols[hard_separator]}\[$(tput sgr0)\]"
+                # PS1+=$(section_end $__last_color 'DEFAULT')
+              fi
+              PS1+="\n"
+              unset __last_color
+            }
+            # -----------------------------------------------------------------------------
+            function pureline_ps1 {
+              __return_code=$?      # save the return code
+              PS1="\n"
+              # load the modules
+              for module in "''${!pureline_modules[@]}"; do
+                ''${pureline_modules[$module]}
+              done
+              # final end point
+              if [ -n "$__last_color" ]; then
+      					PS1+="\[$(tput sgr0)\]''${colors[$__last_color]}''${symbols[hard_separator]}\[$(tput sgr0)\]"
+              else
+                PS1+="$"
+              fi
+              # cleanup
+              PS1+="\[\e[K\] "
+              unset __last_color
+              unset __return_code
+            }
+            # -----------------------------------------------------------------------------
+            # define the basic color set
+            declare -A colors=(
+              [DEFAULT]='\[\e[38;5;12m\]'
+              [BASE03]='\[\e[38;5;8m\]'
+              [BASE02]='\[\e[38;5;0m\]'
+              [BASE01]='\[\e[38;5;10m\]'
+              [BASE00]='\[\e[38;5;11m\]'
+              [BASE0]='\[\e[38;5;12m\]'
+              [BASE1]='\[\e[38;5;14m\]'
+              [BASE2]='\[\e[38;5;7m\]'
+              [BASE3]='\[\e[38;5;15m\]'
+              [YELLOW]='\[\e[38;5;3m\]'
+              [ORANGE]='\[\e[38;5;9m\]'
+              [RED]='\[\e[38;5;1m\]'
+              [MAGENTA]='\[\e[38;5;5m\]'
+              [VIOLET]='\[\e[38;5;13m\]'
+              [BLUE]='\[\e[38;5;4m\]'
+              [CYAN]='\[\e[38;5;6m\]'
+              [GREEN]='\[\e[38;5;2m\]'
+              [BLACK]='\[\e[38;5;16m\]'
+              [BG_DEFAULT]='\[\e[48;5;8m\]'
+              [BG_BASE03]='\[\e[48;5;8m\]'
+              [BG_BASE02]='\[\e[48;5;0m\]'
+              [BG_BASE01]='\[\e[48;5;10m\]'
+              [BG_BASE00]='\[\e[48;5;11m\]'
+              [BG_BASE0]='\[\e[48;5;12m\]'
+              [BG_BASE1]='\[\e[48;5;14m\]'
+              [BG_BASE2]='\[\e[48;5;7m\]'
+              [BG_BASE3]='\[\e[48;5;15m\]'
+              [BG_YELLOW]='\[\e[48;5;3m\]'
+              [BG_ORANGE]='\[\e[48;5;9m\]'
+              [BG_RED]='\[\e[48;5;1m\]'
+              [BG_MAGENTA]='\[\e[48;5;5m\]'
+              [BG_VIOLET]='\[\e[48;5;13m\]'
+              [BG_BLUE]='\[\e[48;5;4m\]'
+              [BG_CYAN]='\[\e[48;5;6m\]'
+              [BG_GREEN]='\[\e[48;5;2m\]'
+              [BG_BLACK]='\[\e[48;5;16m\]'
+            )
+            # define symbols
+            declare -A symbols=(
+              [hard_separator]=""
+              [soft_separator]=""
+              [git]=""
+              [lock]=""
+              [flag]="⚑"
+              [plus]="✚"
+              [tick]="✔"
+              [cross]="✘"
+              [enter]="⏎"
+              [prompt]="λ"
+              [battery_charging]="⚡"
+              [battery_discharging]="▮"
+              [untracked]="?"
+              [stash]="☰"
+              [ahead]="⬆"
+              [behind]="⬇"
+            )
+            # define default modules to load
+            declare -a pureline_modules=(
+              'root_module        RED         BASE2'
+              'user_host_module   BASE01      ORANGE      BASE2'
+              'path_module        CYAN        BASE2       3'
+              'read_only_module   RED         BASE2'
+              'git_module         GREEN       BASE2       ORANGE'
+              'newline_module'
+              'nix_shell_module   YELLOW      BASE2'
+              'return_code_module RED         BASE2'
+              'prompt_module      BLUE        BASE2'
+            )
+            # dynamically set the  PS1
+            PROMPT_COMMAND="pureline_ps1; $PROMPT_COMMAND"
+          '';
 
     shellInitExtra = ''
       source "${fzf-share}/key-bindings.bash"

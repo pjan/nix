@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}: {
+{ config, lib, pkgs, ... }: {
 
   system.defaults = {
     dock = {
@@ -14,22 +14,20 @@
       minimize-to-application = true;
       mouse-over-hilite-stack = true;
       mru-spaces = false;
-			orientation = "left";
+      orientation = "left";
       show-process-indicators = true;
       showhidden = true;
-			show-recents = false;
+      show-recents = false;
       tilesize = 24;
     };
 
-    finder = {
-      CreateDesktop = false;
-    };
+    finder = { CreateDesktop = false; };
 
-		loginwindow = {
-			ShutDownDisabledWhileLoggedIn = true;
-			PowerOffDisabledWhileLoggedIn = true;
-			RestartDisabledWhileLoggedIn = true;
-		};
+    loginwindow = {
+      ShutDownDisabledWhileLoggedIn = true;
+      PowerOffDisabledWhileLoggedIn = true;
+      RestartDisabledWhileLoggedIn = true;
+    };
 
     NSGlobalDomain = {
       AppleFontSmoothing = 1;

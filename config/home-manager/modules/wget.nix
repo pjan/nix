@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
 
-with config; let
+with config;
+let
 
 in {
 
-  home.packages = with pkgs; [
-    wget
-  ];
+  home.packages = with pkgs; [ wget ];
 
   home.sessionVariables."WGETRC" = "${xdg.configHome}/wget/wgetrc";
 
