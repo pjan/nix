@@ -7,7 +7,7 @@ pkgs.buildEnv {
     automake
     clang
     cmake
-		coreutils
+    coreutils
     global
     gmp
     gnumake
@@ -22,7 +22,7 @@ pkgs.buildEnv {
     ninja
     ott
     pkgconfig
-    R
+    # R
     ctags
     rtags
     sbcl
