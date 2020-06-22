@@ -10,7 +10,7 @@ pkgs.buildEnv {
     bashInteractive
     nix-bash-completions
     coreutils
-		csvkit
+    csvkit
     ctop
     cvc4
     direnv
@@ -38,6 +38,7 @@ pkgs.buildEnv {
     silver-searcher
     srm
     sqlite
+    tidal-dl
     time
     tree
     unrar
