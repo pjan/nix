@@ -3,27 +3,35 @@ self: super:
 rec {
 
   # applications/version-management
-  ghi           = super.callPackage ./pkgs/applications/version-management/git-and-tools/ghi { };
+  ghi =
+    super.callPackage ./pkgs/applications/version-management/git-and-tools/ghi
+    { };
 
   #
-  jupyterWith   = super.callPackage ./pkgs/applications/editors/jupyterWith { };
+  jupyterWith = super.callPackage ./pkgs/applications/editors/jupyterWith { };
 
   # development/haskell-modules
-  haskell-init  = super.callPackage ./pkgs/development/haskell-modules/haskell-init { };
-  haskell-shell = super.callPackage ./pkgs/development/haskell-modules/haskell-shell { };
-  
+  haskell-init =
+    super.callPackage ./pkgs/development/haskell-modules/haskell-init { };
+  haskell-shell =
+    super.callPackage ./pkgs/development/haskell-modules/haskell-shell { };
+
   # misc
-  tmuxPlugins   = super.recurseIntoAttrs (super.callPackage ./pkgs/misc/tmux-plugins { });
+  tmuxPlugins =
+    super.recurseIntoAttrs (super.callPackage ./pkgs/misc/tmux-plugins { });
 
   # scripts
-  abspath       = super.callPackage ./pkgs/scripts/abspath { };
-  proxy-toggle  = super.callPackage ./pkgs/scripts/proxy-toggle { };
+  abspath = super.callPackage ./pkgs/scripts/abspath { };
+  proxy-toggle = super.callPackage ./pkgs/scripts/proxy-toggle { };
+
+  # tools
+  tidal-dl = super.callPackage ./pkgs/tools/misc/tidal-dl { };
 
   # Overrides
-  home-manager  = super.callPackage ../home-manager/home-manager {
+  home-manager = super.callPackage ../home-manager/home-manager {
     path = toString ../home-manager;
   };
-  torsocks      = super.callPackage ./pkgs/security/tor/torsocks.nix { };
+  torsocks = super.callPackage ./pkgs/security/tor/torsocks.nix { };
 
   # OSX Apps
   # osx = {
