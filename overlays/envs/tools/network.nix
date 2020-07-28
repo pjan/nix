@@ -5,8 +5,9 @@ pkgs.buildEnv {
   paths = with pkgs; [
     adns
     aria2
-		bandwhich
+    bandwhich
     cacert
+    docker
     dnsutils
     httrack
     iperf
@@ -24,7 +25,7 @@ pkgs.buildEnv {
     sipcalc
     spiped
     weechat
-		whois
+    whois
     w3m
     wget
   ];
