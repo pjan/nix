@@ -20,6 +20,7 @@ in {
     ./modules/aria.nix
     ./modules/bash.nix
     ./modules/defaults.nix
+    ./modules/direnv.nix
     ./modules/gpg.nix
     ./modules/networking.nix
     ./modules/neovim.nix
@@ -59,7 +60,7 @@ in {
 
   # fix for catalina coming with zshell, but keeping bash as default shell
   programs.zsh.enable = true;
-  environment.loginShell = "bash -l";
-  environment.variables.SHELL = "${pkgs.bashInteractive}/bin/bash";
+  # environment.loginShell = "bash -l";
+  # environment.variables.SHELL = "${pkgs.bashInteractive}/bin/bash";
 
 }
