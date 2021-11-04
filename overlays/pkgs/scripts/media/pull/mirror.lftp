@@ -1,0 +1,8 @@
+set ssl:verify-certificate no
+set sftp:auto-confirm yes
+
+open sftp://pjan:42yN3tKazcgT2eyZ4UQT@pjan.cloud.seedboxes.cc:41045
+
+mirror --Remove-source-files --verbose --use-pget-n=12 -c --verbose /Volumes/ARGON/video/01_Downloading/;
+
+bye
